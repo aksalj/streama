@@ -1,0 +1,36 @@
+{
+  "name": "streama",
+  "version": "1.0.0",
+  "description": "It's like Netflix, but self-hosted!",
+  "main": "app/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aksalj/streama.git"
+  },
+  "keywords": [
+    "netflix",
+    "streama"
+  ],
+  "author": "dularion <antonia.hulha@systaro.de>",
+  "license": "MIT",
+  "contributors":[
+    {
+      "name":"Salama AB",
+      "email":"aksalj@aksalj.me"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/aksalj/streama/issues"
+  },
+  "homepage": "https://github.com/aksalj/streama#readme",
+  "dependencies":{
+    "express": "4.13.3",
+    "passport": "0.2.2"
+  }
+}
