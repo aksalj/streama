@@ -11,3 +11,73 @@
  *
  */
 'use strict';
+var express = require('express');
+var UserModel = require("../models").User;
+
+var router = express.Router();
+
+router.use(function timeLog(req, res, next) {
+  console.log('User Access: ', Date.now());
+  next();
+});
+
+/**
+ * Current User
+ */
+router.get('/current.json', function(req, res) {
+  res.send('Current user??');
+});
+
+/**
+ * Save User
+ */
+router.post('/save.json', function(req, res) {
+  res.send('OK');
+});
+
+
+/**
+ * List users? should be /user.json and not /user/user.json
+ */
+router.get('user.json', function(req, res) {
+  res.send('OK');
+});
+
+/**
+ * Check Availability?
+ */
+router.get('/checkAvailability.json', function(req, res) {
+  res.send('OK');
+});
+
+/**
+ * Save and invite
+ */
+router.post('/saveAndInviteUser.json', function(req, res) {
+  res.send('Current user??');
+});
+
+
+/**
+ * Save Profile
+ */
+router.post('/saveProfile.json', function(req, res) {
+  res.send('OK');
+});
+
+/**
+ * Available roles
+ */
+router.get('/availableRoles.json', function(req, res) {
+  res.send('OK');
+});
+
+
+/**
+ * Change password
+ */
+router.post('/changePassword.json', function(req, res) {
+  res.send('OK');
+});
+
+module.exports = router;

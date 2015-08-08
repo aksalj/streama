@@ -11,3 +11,7 @@
  *
  */
 'use strict';
+
+
+
+exports.UserRoutes = require("./user");

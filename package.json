@@ -31,6 +31,7 @@
   "homepage": "https://github.com/aksalj/streama#readme",
   "dependencies":{
     "express": "4.13.3",
-    "passport": "0.2.2"
+    "passport": "0.2.2",
+    "mongoose": "4.1.1"
   }
 }

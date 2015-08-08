@@ -11,3 +11,12 @@
  *
  */
 'use strict';
+var mongoose = require('mongoose');
+
+
+var RoleSchema = mongoose.Schema({
+  authority: {type: String, required: true, unique: true},
+  displayName: String
+});
+
+module.exports = mongoose.model("Role", RoleSchema);

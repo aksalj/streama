@@ -13,9 +13,16 @@
 'use strict';
 
 var express = require('express');
+var routes = require("./routes");
+
+
 var app = express();
 
+// Static
 app.use(express.static('static'));
+
+// Routes
+app.use("/user", routes.UserRoutes);
 
 var server = app.listen(3000, function () {
   var host = server.address().address;
