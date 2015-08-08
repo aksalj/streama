@@ -11,20 +11,21 @@
  *
  */
 'use strict';
-
 var express = require('express');
-
 var routes = require("./routes");
 var dataService = require('./services/data');
 
-
 var app = express();
 
-// Static
+// Static & Views
+app.set('view engine', 'ejs');
+app.set('views', 'static/views');
 app.use(express.static('static'));
 
 // Routes
+app.use("/auth", routes.AuthRoutes);
 app.use("/user", routes.UserRoutes);
+app.get("/", routes.UIRoutes);
 
 var server = app.listen(3000, function () {
   var host = server.address().address;

@@ -82,5 +82,9 @@ UserSchema.methods.checkPassword = function (password) {
   return validPassword(password, this.password);
 };
 
+UserSchema.methods.changePassword = function (current, password) {
+
+};
+
 
 module.exports = mongoose.model("User", UserSchema);

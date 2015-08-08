@@ -12,6 +12,6 @@
  */
 'use strict';
 
-
-
+exports.UIRoutes = require("./ui");
+exports.AuthRoutes = require("./auth");
 exports.UserRoutes = require("./user");
