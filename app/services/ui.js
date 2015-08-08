@@ -31,3 +31,15 @@ exports.render = function (req, res, data) {
 
   res.render("layouts/main", data);
 };
+
+exports.showError = function (req, res, error) {
+  var data = {
+    env: {
+      development: true
+    },
+    exception: error
+  };
+
+  // TODO: Set HTTP code??
+  res.render("error", data);
+};
