@@ -12,6 +12,8 @@
  */
 'use strict';
 var express = require('express');
+var passport = require('passport');
+
 var router = express.Router();
 var uiService = require("./../services/ui");
 
@@ -19,7 +21,6 @@ var uiService = require("./../services/ui");
 
 router.get('/', function(req, res) {
 
-  // TODO: Login first??
 
   var data = {
     view:{
@@ -33,14 +34,5 @@ router.get('/', function(req, res) {
 
   uiService.render(req, res, data);
 });
-
-
-
-router.use(function (req, res) {
-  // TODO: catch errors
-
-  uiService.showError(req, res, null);
-});
-
 
 module.exports = router;

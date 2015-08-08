@@ -12,11 +12,13 @@
  */
 'use strict';
 var express = require('express');
+
+var authService = require('../services/auth');
 var UserModel = require("../models").User;
 
 var router = express.Router();
 
-router.use(function timeLog(req, res, next) {
+router.use(function (req, res, next) {
   console.log('User Access: ', Date.now());
   next();
 });

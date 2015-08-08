@@ -29,7 +29,7 @@ exports.render = function (req, res, data) {
   data.paths = paths;
   data.view = data.view || null;
   data.auth = {
-    user: null//req.user // Must have authed with passport
+    user: req.user
   };
 
   res.render("layouts/main", data);
@@ -58,6 +58,7 @@ exports.showError = function (req, res, error) {
     exception: error
   };
 
-  // TODO: Set HTTP code??
+  res.status(error.code || 500);
+
   res.render("error", data);
 };

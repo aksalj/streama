@@ -12,39 +12,90 @@
  */
 'use strict';
 var express = require('express');
+var passport = require('passport');
+
+// Auth strategies
+var LocalStrategy = require('passport-local').Strategy;
+
 var uiService = require('../services/ui');
 var UserModel = require("../models").User;
 
 var router = express.Router();
 
+{ // Passport
+
+  passport.use(new LocalStrategy(
+    {
+      usernameField: "j_username",
+      passwordField: "j_password"
+    },
+    function (username, password, done) {
+      var msg = "Sorry, we were not able to find a user with that username and/or password."; // i18n?
+      UserModel.findByUsername(username, function (err, user) {
+        if (err) {
+          return done(err);
+        }
+        if (!user) {
+          return done(null, false, {message: msg});
+        }
+        if (!user.validPassword(password)) {
+          return done(null, false, {message: msg});
+        }
+        return done(null, user);
+      });
+    }
+  ));
+
+  passport.serializeUser(function (user, done) {
+    console.log("Serialize");
+    done(null, user.username);
+  });
+
+  passport.deserializeUser(function (id, done) {
+    console.log("Deserialize");
+    UserModel.findByUsername(id, function (err, user) {
+      done(err, user);
+    });
+  });
+
+}
+
+
 router.get('/login', function(req, res) {
 
-  // TODO: Go home if logged in already
+  if(req.isAuthenticated()) {
+    res.redirect('/');
+  } else {
 
-  var data = {
-    title: "Login",
-    view: {
-      body: {
-        path: "../login/auth",
-        data: {
-          postUrl: "/auth/login",
-          flash: { message: null },
-          rememberMeParameter: "rememberMe"
+    var data = {
+      title: "Login",
+      view: {
+        body: {
+          path: "../login/auth",
+          data: {
+            postUrl: "/auth/login",
+            message: req.flash("error"),
+            rememberMeParameter: "rememberMe"
+          }
         }
       }
-    }
-  };
+    };
 
-  uiService.render(req, res, data);
+    uiService.render(req, res, data);
+  }
 });
 
-router.post('/login', function(req, res) {
-  res.send('Authenticate');
-});
+
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/auth/login',
+  failureFlash: true
+}));
 
 
 router.get('/logout', function(req, res) {
-  res.send('logout');
+  req.logout();
+  res.redirect('/');
 });
 
 module.exports = router;

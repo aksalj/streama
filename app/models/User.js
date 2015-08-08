@@ -38,14 +38,24 @@ var UserSchema = mongoose.Schema({
 
 });
 
+/**
+ *
+ * @param value
+ */
 var hashPassword = function (value) {
   var salt = bcrypt.genSaltSync(12);
   return bcrypt.hashSync(value, salt);
 };
 
-var validPassword = function (password, hash) {
+/**
+ *
+ * @param password
+ * @param hash
+ */
+var isValidPassword = function (password, hash) {
   return bcrypt.compareSync(password, hash);
 };
+
 
 UserSchema.pre('save', function(next) {
   this.dateCreated = new Date();
@@ -57,9 +67,6 @@ UserSchema.pre('save', function(next) {
 });
 
 UserSchema.pre('update', function() {
-  // TODO: Password dirty? Encrypt!
-
-
   this.update({},{ $set: { lastUpdated: new Date() } });
 });
 
@@ -81,12 +88,15 @@ UserSchema.methods.getAuthorities = function (cb) {
   return this.model('Role').find({ _id: {$in: roles}}, cb);
 };
 
-UserSchema.methods.checkPassword = function (password) {
-  return validPassword(password, this.password);
+UserSchema.methods.validPassword = function (password) {
+  return isValidPassword(password, this.password);
 };
 
-UserSchema.methods.changePassword = function (current, password) {
-
+UserSchema.methods.changePassword = function (current, password, cb) {
+  if (isValidPassword(current, this.password)) {
+    this.password = hashPassword(password);
+    this.save(cb);
+  }
 };
 
 
