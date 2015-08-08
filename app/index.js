@@ -43,6 +43,7 @@ app.use(passport.session());
 app.set('view engine', 'ejs');
 app.set('views', 'static/views');
 app.use(express.static('static'));
+app.use(express.static('static/assets/javascripts/streama-app/templates'));
 
 // Routes
 //    API
