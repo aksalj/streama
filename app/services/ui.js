@@ -33,11 +33,10 @@ exports.render = function (req, res, data) {
   res.render("layouts/main", data);
 };
 
-exports.renderInviteEmail = function (req, res) {
-  // ${streama.Settings.findBySettingsKey('Base URL')?.value}/invite?uuid=${user?.uuid}
+exports.renderInviteEmail = function (req, res, user) {
+  // HUH: user is user to be invited?
 
   var cb = function (err, settings) {
-    var user = req.user;
     var data = {
       title: "Invitation",
       inviteUrl: settings.value + "/invite?uuid=" + user.uuid
