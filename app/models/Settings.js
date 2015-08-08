@@ -21,4 +21,8 @@ var SettingsSchema = mongoose.Schema({
   required: Boolean
 });
 
+SettingsSchema.statics.findBySettingsKey = function (key, cb) {
+  this.findOne({settingsKey:key}, cb);
+};
+
 module.exports = mongoose.model("Settings", SettingsSchema);

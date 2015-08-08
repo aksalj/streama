@@ -1,11 +1,8 @@
-
-<%@ page import="streama.Settings" contentType="text/html"%>
-
 <html>
 <head>
   <meta name="viewport" content="width=device-width" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Really Simple HTML Email Template</title>
+  <title><%= title %></title>
   <style>
   /* -------------------------------------
       GLOBAL
@@ -179,8 +176,6 @@
 
 <body bgcolor="#f6f6f6">
 
-
-
 <!-- body -->
 <table class="body-wrap">
 
@@ -199,7 +194,7 @@
                 <tr>
                   <td class="padding">
                     <p>
-                      <a href="${streama.Settings.findBySettingsKey('Base URL')?.value}/invite?uuid=${user?.uuid}" class="btn-primary">Set Password & Enjoy</a>
+                      <a href="<%= inviteUrl %>" class="btn-primary">Set Password & Enjoy</a>
                   </td>
                 </tr>
               </table>

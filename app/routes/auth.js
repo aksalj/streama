@@ -12,11 +12,31 @@
  */
 'use strict';
 var express = require('express');
+var uiService = require('../services/ui');
 var UserModel = require("../models").User;
 
 var router = express.Router();
 
+router.get('/login', function(req, res) {
 
+  // TODO: Go home if logged in already
+
+  var data = {
+    title: "Login",
+    view: {
+      body: {
+        path: "../login/auth",
+        data: {
+          postUrl: "/auth/login",
+          flash: { message: null },
+          rememberMeParameter: "rememberMe"
+        }
+      }
+    }
+  };
+
+  uiService.render(req, res, data);
+});
 
 router.post('/login', function(req, res) {
   res.send('Authenticate');

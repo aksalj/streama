@@ -11,6 +11,7 @@
  *
  */
 'use strict';
+var SettingsModel = require("./../models").Settings;
 
 var assets = { root : "/assets/" };
 assets.img = assets.root + "images/";
@@ -30,6 +31,22 @@ exports.render = function (req, res, data) {
   data.user = req.user; // Must have authed with passport
 
   res.render("layouts/main", data);
+};
+
+exports.renderInviteEmail = function (req, res) {
+  // ${streama.Settings.findBySettingsKey('Base URL')?.value}/invite?uuid=${user?.uuid}
+
+  var cb = function (err, settings) {
+    var user = req.user;
+    var data = {
+      title: "Invitation",
+      inviteUrl: settings.value + "/invite?uuid=" + user.uuid
+    };
+    res.render("mail/userInvite", data);
+  };
+
+  SettingsModel.findBySettingsKey('Base URL', cb);
+
 };
 
 exports.showError = function (req, res, error) {
