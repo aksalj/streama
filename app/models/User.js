@@ -67,9 +67,12 @@ UserSchema.pre('update', function() {
 
 // HUH: Use me for checkAvailability() as well
 UserSchema.statics.findByUsername = function(usrname, cb) {
-  return this.model('User').find({username: usrname}, cb);
+  return this.findOne({username: usrname}, cb);
 };
 
+UserSchema.statics.findByUuid = function(uuid, cb) {
+  return this.findOne({uuid: uuid}, cb);
+};
 
 // Instance methods
 

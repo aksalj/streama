@@ -18,10 +18,9 @@ var UserModel = require("../models/User");
 
 var router = express.Router();
 
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
 
   var data = {
-    title: "Invitation",
     view: {
       body: {
         path: "../invite/index",
@@ -39,30 +38,30 @@ router.get('/', function(req, res) {
 
 });
 
-router.post('/setPassword', function(req, res) {
+router.post('/setPassword', function (req, res) {
 
   var password = req.body.password;
   var passwordRepeat = req.body.passwordRepeat;
   var uuid = req.body.uuid;
 
-  var cb = function(err, user) {
-    if(!err) {
+  var cb = function (err, user) {
+    if (!err && uuid && user && password && passwordRepeat && password == passwordRepeat && password.length > 5) {
 
-      if(uuid || user || password || passwordRepeat || password == passwordRepeat || password.length > 5) {
-        user.password = password;
-        user.uuid = null;
-        user.save(function (err) {
-          if (err) {
-            console.error(err);
-          }
-          res.redirect('/');
-        });
-      }
+      user.password = password;
+      user.uuid = null;
+      user.save(function (err) {
+        if (err) {
+          console.error(err);
+        }
+        res.redirect('/');
+      });
 
     } else {
+      // TODO: Proper error reporting
       console.error(err);
-      res.redirect('/invite');
     }
+
+    res.redirect('/invite');
 
   };
 
