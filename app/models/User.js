@@ -12,6 +12,7 @@
  */
 'use strict';
 var mongoose = require('mongoose');
+var bcrypt = require('bcrypt');
 
 
 var UserSchema = mongoose.Schema({
@@ -20,7 +21,7 @@ var UserSchema = mongoose.Schema({
   deleted: { type: Boolean, default: false },
 
   username: {type: String, unique: true, required: true},
-  password: {type: String, required: true}, // TODO: Encrypt before insert
+  password: {type: String, required: true},
 
   enabled: { type: Boolean, default: false },
   accountExpired: Boolean,
@@ -33,17 +34,24 @@ var UserSchema = mongoose.Schema({
 
   favoriteGenres:[mongoose.Schema.Types.ObjectId], // TODO: static hasMany = [favoriteGenres: Genre]
 
-  userRoles:[mongoose.Schema.Types.ObjectId]
+  roles:[mongoose.Schema.Types.ObjectId]
 
 });
 
+var hashPassword = function (value) {
+  var salt = bcrypt.genSaltSync(12);
+  return bcrypt.hashSync(value, salt);
+};
+
+var validPassword = function (password, hash) {
+  return bcrypt.compareSync(password, hash);
+};
+
 UserSchema.pre('save', function(next) {
   this.dateCreated = new Date();
-  if(!this.password) {
-    this.password = "pwd"; // TODO: Random UUID?
-  }
+  this.lastUpdated = new Date();
 
-  // TODO: Encrypt password
+  this.password = hashPassword(this.password);
 
   next();
 });
@@ -55,9 +63,23 @@ UserSchema.pre('update', function() {
   this.update({},{ $set: { lastUpdated: new Date() } });
 });
 
+// Static methods
+
+// HUH: Use me for checkAvailability() as well
+UserSchema.statics.findByUsername = function(usrname, cb) {
+  return this.model('User').find({username: usrname}, cb);
+};
+
+
+// Instance methods
+
 UserSchema.methods.getAuthorities = function (cb) {
-  var roles = this.userRoles;
+  var roles = this.roles;
   return this.model('Role').find({ _id: {$in: roles}}, cb);
+};
+
+UserSchema.methods.checkPassword = function (password) {
+  return validPassword(password, this.password);
 };
 
 

@@ -11,3 +11,14 @@
  *
  */
 'use strict';
+var mongoose = require('mongoose');
+
+
+var SettingsSchema = mongoose.Schema({
+  settingsKey: {type: String, required: true},
+  value: String,
+  description: String,
+  required: Boolean
+});
+
+module.exports = mongoose.model("Settings", SettingsSchema);

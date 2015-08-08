@@ -13,7 +13,9 @@
 'use strict';
 
 var express = require('express');
+
 var routes = require("./routes");
+var dataService = require('./services/data');
 
 
 var app = express();
@@ -29,4 +31,7 @@ var server = app.listen(3000, function () {
   var port = server.address().port;
 
   console.log('Streama listening at http://%s:%s', host, port);
+
+  dataService.populateWithDefaultData();
+
 });

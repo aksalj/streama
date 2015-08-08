@@ -32,6 +32,7 @@
   "dependencies":{
     "express": "4.13.3",
     "passport": "0.2.2",
-    "mongoose": "4.1.1"
+    "mongoose": "4.1.1",
+    "bcrypt": "0.8.4"
   }
 }

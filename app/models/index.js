@@ -13,6 +13,7 @@
 'use strict';
 var mongoose = require('mongoose');
 
+// TODO: Load DB config
 mongoose.connect('mongodb://localhost:27017/stream');
 
 
@@ -26,3 +27,6 @@ exports.TvShow = require("./TvShow");
 exports.Movie = require("./Movie");
 exports.Video = require("./Video");
 exports.ViewingStatus = require("./ViewingStatus");
+
+
+

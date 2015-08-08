@@ -37,9 +37,9 @@ router.post('/save.json', function(req, res) {
 
 
 /**
- * List users? should be /user.json and not /user/user.json
+ * List users? should be /user.json and not /user
  */
-router.get('user.json', function(req, res) {
+router.get('/', function(req, res) {
   res.send('OK');
 });
 
