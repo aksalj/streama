@@ -25,12 +25,71 @@ paths.logout = paths.root + "auth/logout";
 
 exports.render = function (req, res, data) {
   data.title = data.title || "Streama";
-  data.assets = assets;
-  data.paths = paths;
+
   data.view = data.view || null;
   data.auth = {
     user: req.user
   };
+
+  data.paths = paths;
+  data.assets = assets;
+  data.styles = [
+
+    //assets.root + "lib/bootstrap/dist/css/bootstrap-theme.min.css",
+    assets.root + "lib/bootstrap.min.css",
+    assets.root + "lib/alertify/themes/alertify.core.css",
+    assets.root + "lib/alertify/themes/alertify.bootstrap3.css",
+    assets.root + "lib/ionicons/css/ionicons.min.css",
+    assets.root + "lib/jquery-ui-1.11.4.custom/jquery-ui.theme.min.css",
+
+    assets.css + "style.css"
+  ];
+  data.scripts = [
+
+    assets.root + "lib/jquery/dist/jquery.min.js",
+    assets.root + "lib/jquery-ui-1.11.4.custom/jquery-ui.min.js",
+    assets.root + "lib/angular/angular.js",
+    assets.root + "lib/alertify/alertify.min.js",
+    assets.root + "lib/angular-local-storage/dist/angular-local-storage.min.js",
+    assets.root + "lib/angular-sanitize/angular-sanitize.min.js",
+    assets.root + "lib/angular-ui-router/release/angular-ui-router.min.js",
+    assets.root + "lib/angular-ui-slider/src/slider.js",
+    assets.root + "lib/Autolinker.js/dist/Autolinker.js",
+    assets.root + "lib/bootstrap/dist/js/bootstrap.min.js",
+    assets.root + "lib/lodash/lodash.min.js",
+    assets.root + "lib/mousetrap/mousetrap.min.js",
+    assets.root + "lib/ng-file-upload/ng-file-upload-all.min.js",
+    assets.root + "lib/ui-bootstrap-custom-build/ui-bootstrap-custom-0.13.1.min.js",
+
+    assets.js + "streama-app.js",
+
+    assets.js + "controllers/admin-ctrl.js",
+    assets.js + "controllers/admin-movie-ctrl.js",
+    assets.js + "controllers/admin-movies-ctrl.js",
+    assets.js + "controllers/admin-settings-ctrl.js",
+    assets.js + "controllers/admin-show-ctrl.js",
+    assets.js + "controllers/admin-shows-ctrl.js",
+    assets.js + "controllers/admin-users-ctrl.js",
+    assets.js + "controllers/dash-ctrl.js",
+    assets.js + "controllers/player-ctrl.js",
+    assets.js + "controllers/profile-ctrl.js",
+    assets.js + "controllers/modal-file-browser-ctrl.js",
+    assets.js + "controllers/modal-file-ctrl.js",
+    assets.js + "controllers/modal-movie-ctrl.js",
+    assets.js + "controllers/modal-tvshow-ctrl.js",
+    assets.js + "controllers/modal-user-ctrl.js",
+    assets.js + "controllers/modal-video-ctrl.js",
+
+    assets.js + "directives/admin-episode-directive.js",
+
+    assets.js + "services/api-service.js",
+    assets.js + "services/filters.js",
+    assets.js + "services/modal-service.js",
+    assets.js + "services/socket-service.js",
+    assets.js + "services/upload-service.js"
+
+
+  ];
 
   res.render("layouts/main", data);
 };

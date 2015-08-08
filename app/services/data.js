@@ -72,7 +72,7 @@ var createDefaultUsers = function (roles) {
 
   // TODO: Give admin all roles?
   roles.forEach(function(role) {
-    DEFAULT_USERS[0].roles.push(role._id);
+    DEFAULT_USERS[0].roles.push(role.authority);
   });
 
 

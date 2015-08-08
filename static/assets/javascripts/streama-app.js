@@ -11,7 +11,7 @@ streamaApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', func
 	$stateProvider
 		.state('dash', {
 			url: '/',
-			templateUrl: 'dash.htm',
+			templateUrl: 'assets/javascripts/streama-app/templates/dash.tpl.htm',
 			controller: 'dashCtrl',
       resolve: {
         currentUser: ['apiService', '$rootScope', function (apiService, $rootScope) {
@@ -26,7 +26,7 @@ streamaApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', func
 		})
 		.state('profile', {
 			url: '/profile',
-			templateUrl: 'profile.htm',
+			templateUrl: 'assets/javascripts/streama-app/templates/profile.tpl.htm',
 			controller: 'profileCtrl',
       resolve: {
         currentUser: ['apiService', '$rootScope', function (apiService, $rootScope) {
@@ -56,7 +56,7 @@ streamaApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', func
 		})
 		.state('admin', {
 			url: '/admin',
-			templateUrl: 'admin.htm',
+			templateUrl: 'assets/javascripts/streama-app/templates/admin.tpl.htm',
 			controller: 'adminCtrl',
       resolve: {
         currentUser: ['apiService', '$rootScope', '$state', function (apiService, $rootScope, $state) {

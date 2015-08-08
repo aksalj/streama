@@ -34,7 +34,7 @@ var UserSchema = mongoose.Schema({
 
   favoriteGenres:[mongoose.Schema.Types.ObjectId], // TODO: static hasMany = [favoriteGenres: Genre]
 
-  roles:[mongoose.Schema.Types.ObjectId]
+  roles:[String]
 
 });
 
@@ -85,7 +85,7 @@ UserSchema.statics.findByUuid = function(uuid, cb) {
 
 UserSchema.methods.getAuthorities = function (cb) {
   var roles = this.roles;
-  return this.model('Role').find({ _id: {$in: roles}}, cb);
+  return this.model('Role').find({ authority: {$in: roles}}, cb);
 };
 
 UserSchema.methods.validPassword = function (password) {

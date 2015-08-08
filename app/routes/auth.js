@@ -47,12 +47,10 @@ var router = express.Router();
   ));
 
   passport.serializeUser(function (user, done) {
-    console.log("Serialize");
     done(null, user.username);
   });
 
   passport.deserializeUser(function (id, done) {
-    console.log("Deserialize");
     UserModel.findByUsername(id, function (err, user) {
       done(err, user);
     });
