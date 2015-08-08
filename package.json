@@ -31,9 +31,14 @@
   "homepage": "https://github.com/aksalj/streama#readme",
   "dependencies":{
     "express": "4.13.3",
+    "body-parser": "1.13.3",
     "passport": "0.2.2",
     "mongoose": "4.1.1",
     "bcrypt": "0.8.4",
     "ejs": "2.3.3"
+  },
+
+  "devDependencies" : {
+    "morgan": "*"
   }
 }

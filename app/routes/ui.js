@@ -31,7 +31,7 @@ router.get('/', function(req, res) {
     }
   };
 
-  uiService.render(data, res);
+  uiService.render(req, res, data);
 });
 
 
@@ -39,7 +39,7 @@ router.get('/', function(req, res) {
 router.use(function (req, res) {
   // TODO: catch errors
 
-  res.render("error",{});
+  uiService.showError(req, res, null);
 });
 
 

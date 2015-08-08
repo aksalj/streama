@@ -13,6 +13,7 @@
 'use strict';
 var express = require('express');
 var bodyParser = require('body-parser');
+var morgan = require('morgan');
 
 var routes = require("./routes");
 var dataService = require('./services/data');
@@ -21,6 +22,7 @@ dataService.populateWithDefaultData(); // FIXME: Do this on first launch only
 var app = express();
 
 // Parsers
+app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -32,6 +34,7 @@ app.use(express.static('static'));
 // Routes
 app.use("/auth", routes.AuthRoutes);
 app.use("/user", routes.UserRoutes);
+app.use("/invite", routes.InviteRoutes);
 app.get("/", routes.UIRoutes);
 
 var server = app.listen(3000, function () {

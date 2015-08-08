@@ -28,7 +28,9 @@ exports.render = function (req, res, data) {
   data.assets = assets;
   data.paths = paths;
   data.view = data.view || null;
-  data.user = req.user; // Must have authed with passport
+  data.auth = {
+    user: null//req.user // Must have authed with passport
+  };
 
   res.render("layouts/main", data);
 };

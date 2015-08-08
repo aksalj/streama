@@ -2,10 +2,6 @@
   <% if (params.uuid && params.uuid != 'null') { %>
     <h1>You have been invited!</h1>
 
-  <% } else { %>
-
-    <h1 class="color-danger">Your link is not valid anymore.</h1>
-
     <%# TODO: setPassword in InviteController  %>
 
     <form class="form-horizontal" action="<%= setPasswordUrl %>" method="post">
@@ -33,6 +29,10 @@
 
       <button class="btn btn-success pull-right" ng-disabled="!valid">Save Password & Continue</button>
     </form>
+
+  <% } else { %>
+
+    <h1 class="color-danger">Your link is not valid anymore.</h1>
 
   <% }%>
 

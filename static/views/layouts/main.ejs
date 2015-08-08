@@ -25,31 +25,33 @@
         <img src="<%= assets.img + 'logo.png' %>">
       </a>
 
-			<ul class="navigation">
-        <%# if user is content manager  %>
-        <% if (auth.user.roles.indexOf("ROLE_CONTENT_MANAGER") != -1 ) { %>
-					<li><a ui-sref="admin.shows">Admin</a></li>
-				<% } %>
-
-        <%# if user is admin but not content manager  %>
-        <% if (auth.user.roles.indexOf("ROLE_ADMIN") != -1 ) { %>
-          <% if (auth.user.roles.indexOf("ROLE_CONTENT_MANAGER") == -1 ) { %>
-            <li><a ui-sref="admin.users">Admin</a></li>
+      <%# if logged in %>
+      <% if (auth.user) { %>
+        <ul class="navigation">
+          <%# if user is content manager  %>
+          <% if (auth.user.roles.indexOf("ROLE_CONTENT_MANAGER") != -1 ) { %>
+            <li><a ui-sref="admin.shows">Admin</a></li>
           <% } %>
-				<% } %>
 
-        <%# if logged in %>
-        <% if (auth.user) { %>
-					<li><a ui-sref="dash">Dashboard</a></li>
-					<li><a ui-sref="profile">Profile</a></li>
-          <li><a href="<%= paths.logout %>">Logout</a></li>
-				<% } %>
-			</ul>
+          <%# if user is admin but not content manager  %>
+          <% if (auth.user.roles.indexOf("ROLE_ADMIN") != -1 ) { %>
+            <% if (auth.user.roles.indexOf("ROLE_CONTENT_MANAGER") == -1 ) { %>
+              <li><a ui-sref="admin.users">Admin</a></li>
+            <% } %>
+          <% } %>
+
+
+            <li><a ui-sref="dash">Dashboard</a></li>
+            <li><a ui-sref="profile">Profile</a></li>
+            <li><a href="<%= paths.logout %>">Logout</a></li>
+
+        </ul>
+      <% } %>
 		</header>
 
     <%# TODO: Include view-specific body %>
     <% if (view.body) { %>
-    <%- include(inc.body.path, inc.body.data); %>
+    <%- include(view.body.path, view.body.data); %>
     <% } %>
 	</body>
 </html>

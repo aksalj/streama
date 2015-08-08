@@ -28,7 +28,7 @@ router.get('/', function(req, res) {
         data: {
           setPasswordUrl: "/invite/setPassword",
           params: {
-            uuid: null
+            uuid: req.query.uuid
           }
         }
       }
