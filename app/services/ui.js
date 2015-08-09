@@ -41,7 +41,7 @@ var scripts = [
   assets.bower + "alertifyjs/dist/js/alertify.js",
   assets.bower + "bootstrap/dist/js/bootstrap.min.js",
   assets.bower + "angular/angular.js",
-  assets.bower + "angular-bootstrap/ui-bootstrap.js",
+  assets.bower + "angular-bootstrap/ui-bootstrap-tpls.js",
   assets.bower + "angular-local-storage/dist/angular-local-storage.min.js",
   assets.bower + "angular-sanitize/angular-sanitize.min.js",
   assets.bower + "angular-ui-router/release/angular-ui-router.min.js",

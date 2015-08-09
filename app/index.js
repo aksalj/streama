@@ -43,7 +43,9 @@ app.use(passport.session());
 app.set('view engine', 'ejs');
 app.set('views', 'static/views');
 app.use(express.static('static'));
+// FIXME: Find cleaner way of doing this
 app.use(express.static('static/assets/javascripts/streama-app/templates'));
+app.use("/template", express.static('static/assets/lib/bower_components/angular-ui-bootstrap/template'));
 
 // Routes
 //    API
