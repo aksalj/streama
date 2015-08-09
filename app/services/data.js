@@ -15,6 +15,9 @@ var UserModel = require("../models/User");
 var RoleModel = require("../models/Role");
 var SettingsModel = require("../models/Settings");
 
+var settingsService = require("./settings");
+
+// TODO: Load these from a config file
 var DEFAULT_ROLES = [
   {authority: "ROLE_ADMIN", displayName:"Admin"},
   {authority: "ROLE_CONTENT_MANAGER", displayName:"Content Manager"}
@@ -29,28 +32,6 @@ var DEFAULT_USERS = [
   }
 ];
 
-var DEFAULT_SETTINGS = [
-  {
-    settingsKey: 'Upload Directory',
-    description: 'This setting provides the application with your desired upload-path for all files. ' +
-    'The default so far has been /data/streama. Remember: if you change this path, copy all the files (that were previously added) into the new directory.',
-    required: true
-  },
-
-  {
-    settingsKey: 'TheMovieDB API key',
-    description: 'This API-key is required by the application to fetch all the nice Movie/Episode/Show data for you. Get one for free at https://www.themoviedb.org/',
-    required: true
-  },
-
-  {
-    settingsKey: 'Base URL',
-    value: 'http://localhost:3000/',
-    description: 'The Base-URL is used for the videos and the link in the invitation-email.',
-    required: true
-  }
-
-];
 
 var createDefaultRoles = function (cb) {
 
@@ -90,7 +71,7 @@ var createDefaultSettings = function () {
 
   SettingsModel.collection.remove();
 
-  SettingsModel.create(DEFAULT_SETTINGS, function (err) {
+  SettingsModel.create(settingsService.DEFAULT_SETTINGS, function (err) {
     if(err){
       console.error(err);
     }

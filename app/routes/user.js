@@ -14,27 +14,28 @@
 var express = require('express');
 
 var authService = require('../services/auth');
+var marshalService = require('../services/marshaller');
 var UserModel = require("../models").User;
 
 var router = express.Router();
 
-router.use(function (req, res, next) {
-  console.log('User Access: ', Date.now());
-  next();
-});
+//router.use(function (req, res, next) {
+//  console.log('User Access: ', Date.now());
+//  next();
+//});
 
 /**
  * Current User
  */
 router.get('/current.json', function(req, res) {
-  res.send('Current user??');
+  marshalService.sendUserJson(res, req.user);
 });
 
 /**
  * Save User
  */
 router.post('/save.json', function(req, res) {
-  res.send('OK');
+  res.end();
 });
 
 
@@ -42,21 +43,21 @@ router.post('/save.json', function(req, res) {
  * List users? should be /user.json and not /user
  */
 router.get('/', function(req, res) {
-  res.send('OK');
+  res.end();
 });
 
 /**
  * Check Availability?
  */
 router.get('/checkAvailability.json', function(req, res) {
-  res.send('OK');
+  res.end();
 });
 
 /**
  * Save and invite
  */
 router.post('/saveAndInviteUser.json', function(req, res) {
-  res.send('Current user??');
+  res.end();
 });
 
 
@@ -64,14 +65,14 @@ router.post('/saveAndInviteUser.json', function(req, res) {
  * Save Profile
  */
 router.post('/saveProfile.json', function(req, res) {
-  res.send('OK');
+  res.end();
 });
 
 /**
  * Available roles
  */
 router.get('/availableRoles.json', function(req, res) {
-  res.send('OK');
+  res.end();
 });
 
 
@@ -79,7 +80,7 @@ router.get('/availableRoles.json', function(req, res) {
  * Change password
  */
 router.post('/changePassword.json', function(req, res) {
-  res.send('OK');
+  res.end();
 });
 
 module.exports = router;

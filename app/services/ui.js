@@ -11,7 +11,7 @@
  *
  */
 'use strict';
-var SettingsModel = require("./../models").Settings;
+var settingsService = require("./settings");
 
 var assets = { root : "/assets/" };
 assets.img = assets.root + "images/";
@@ -101,15 +101,11 @@ exports.render = function (req, res, data) {
 exports.renderInviteEmail = function (req, res, user) {
   // HUH: user is user to be invited?
 
-  var cb = function (err, settings) {
-    var data = {
-      title: "Invitation",
-      inviteUrl: settings.value + "/invite?uuid=" + user.uuid
-    };
-    res.render("mail/userInvite", data);
+  var data = {
+    title: "Invitation",
+    inviteUrl: settingsService.BASE_URL + "/invite?uuid=" + user.uuid
   };
-
-  SettingsModel.findBySettingsKey('Base URL', cb);
+  res.render("mail/userInvite", data);
 
 };
 
