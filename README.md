@@ -22,9 +22,11 @@ This fork uses `express` & `mongodb` instead of `grail` & `mysql` because I don'
 - [License](#license)
 
 # Getting Started
-Fire up your `mongodb`, then:
+Assuming you have `mongodb`, `nodejs`, `npm` and `bower` correctly installed, fire up your `mongodb`, and:
+
 ```shell
 $ npm install
+$ bower install
 $ npm start
 ```
 
