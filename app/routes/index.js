@@ -16,3 +16,4 @@ exports.UIRoutes = require("./ui");
 exports.AuthRoutes = require("./auth");
 exports.UserRoutes = require("./user");
 exports.InviteRoutes = require("./invite");
+exports.SettingsRoutes = require("./settings");

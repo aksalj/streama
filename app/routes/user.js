@@ -25,6 +25,13 @@ var router = express.Router();
 //});
 
 /**
+ * List users? should be /user.json and not /user
+ */
+router.get('/', function(req, res) {
+  res.end();
+});
+
+/**
  * Current User
  */
 router.get('/current.json', function(req, res) {
@@ -38,13 +45,6 @@ router.post('/save.json', function(req, res) {
   res.end();
 });
 
-
-/**
- * List users? should be /user.json and not /user
- */
-router.get('/', function(req, res) {
-  res.end();
-});
 
 /**
  * Check Availability?

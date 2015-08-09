@@ -14,6 +14,13 @@
 
 var settingsService = require("./settings");
 
+var sendJson = function (res, data) {
+
+  res.json(data);
+};
+
+exports.sendJson = sendJson;
+
 exports.sendUserJson = function (res, user) {
 
   var data = {
@@ -33,7 +40,7 @@ exports.sendUserJson = function (res, user) {
     data.invitationLink = settingsService.BASE_URL + "/invite?uuid=" + user.uuid;
   }
 
-  res.json(data);
+  sendJson(res, data);
 
 };
 
@@ -51,7 +58,7 @@ exports.sendFileJson = function (res, file) {
     quality: file.quality
   };
 
-  res.json(data);
+  sendJson(res, data);
 
 };
 

@@ -47,7 +47,8 @@ app.use(express.static('static/assets/javascripts/streama-app/templates'));
 
 // Routes
 //    API
-app.use("/user", authService.ensureAuthenticated, routes.UserRoutes);
+app.use("/user(.json)?", authService.ensureAuthenticated, routes.UserRoutes);
+app.use("/settings(.json)?", authService.ensureAuthenticated, routes.SettingsRoutes);
 
 //    UI
 app.use("/auth", routes.AuthRoutes);
