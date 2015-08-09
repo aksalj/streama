@@ -22,9 +22,11 @@ This fork uses `express` & `mongodb` instead of `grail` & `mysql` because I don'
 - [License](#license)
 
 # Getting Started
-- For local setup, please refer to [Local Streama Setup](https://github.com/dularion/streama/wiki/Local-Streama-Setup)
-- For remote setup, please refer to [Streama on a remote Ubuntu 14.04](https://github.com/dularion/streama/wiki/Setup-Streama-on-Ubuntu-14.04)
-- For developers, please refer to [Streama for development](https://github.com/dularion/streama/wiki/Set-Up-Streama-for-Development)
+Fire up your `mongodb`, then:
+```shell
+$ npm install
+$ npm start
+```
 
 # The Application
 
@@ -74,12 +76,7 @@ Uploading video-files for each episode is as easy as drag-and-drop!
 Users can be invited and managed in the admin-panel. By default, they are non-admins, meaning they can only view videos, not create them. You can make them admins with the press of a button. Since there is user-administration in place, I plan on expanding on this a lot! Another feature I want to add is the ability for users to add and administer some form of playlists. There is a lot of potential to make this even better!
 
 # Technical Details
-This application is web-based and is programmed with [Grails 2.4.4](https://grails.org/) and MySQL. For login & user-handling [SpringSecurity](http://projects.spring.io/spring-security/) is used. For the most part, Grails is only there to generate REST-endpoints for the frontend. For all the front-end components, [AngularJS](https://angularjs.org/) is used. The player is completely HTML5-based, meaning there are limitations as to which file-types can be played at the moment.
-
-The application uses Grails for the REST-API, and AngularJS for the frontend. If you don't like grails, you can also just use the frontend components and add your own REST-API for handling all the data :)
-
-As an API for all the movies and shows I used the awesome API from theMovieDatabase.
-[![theMovieDatabase](https://d3a8mw37cqal2z.cloudfront.net/images/header_v2.png)](https://www.themoviedb.org/documentation/api)
+`TODO`
 
 # Changelog
 Please refer to [Change Log](https://github.com/dularion/streama/blob/master/CHANGELOG.md)
