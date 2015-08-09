@@ -8,4 +8,5 @@
 # Nodejs & Bower
 *.log
 node_modules/
+bower_components/
 

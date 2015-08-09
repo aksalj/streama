@@ -17,6 +17,8 @@ var assets = { root : "/assets/" };
 assets.img = assets.root + "images/";
 assets.css = assets.root + "stylesheets/";
 assets.js = assets.root + "javascripts/";
+assets.lib = assets.root + "lib/";
+assets.bower = assets.lib + "bower_components/";
 
 var paths = { root: "/" };
 paths.login = paths.root + "auth/login";
@@ -35,30 +37,32 @@ exports.render = function (req, res, data) {
   data.assets = assets;
   data.styles = [
 
-    //assets.root + "lib/bootstrap/dist/css/bootstrap-theme.min.css",
-    assets.root + "lib/bootstrap.min.css",
-    assets.root + "lib/alertify/themes/alertify.core.css",
-    assets.root + "lib/alertify/themes/alertify.bootstrap3.css",
-    assets.root + "lib/ionicons/css/ionicons.min.css",
-    assets.root + "lib/jquery-ui-1.11.4.custom/jquery-ui.theme.min.css",
+    assets.lib + "bootstrap.min.css",
+    assets.lib + "jquery-ui-1.11.4.custom/jquery-ui.theme.min.css",
+    assets.bower + "alertifyjs/dist/css/alertify-bootstrap-3.css",
+    assets.bower + "ionicons/css/ionicons.min.css",
 
     assets.css + "style.css"
   ];
   data.scripts = [
 
-    assets.root + "lib/jquery/dist/jquery.min.js",
+
+    assets.bower + "jquery/dist/jquery.min.js",
     assets.root + "lib/jquery-ui-1.11.4.custom/jquery-ui.min.js",
-    assets.root + "lib/angular/angular.js",
-    assets.root + "lib/alertify/alertify.min.js",
-    assets.root + "lib/angular-local-storage/dist/angular-local-storage.min.js",
-    assets.root + "lib/angular-sanitize/angular-sanitize.min.js",
-    assets.root + "lib/angular-ui-router/release/angular-ui-router.min.js",
-    assets.root + "lib/angular-ui-slider/src/slider.js",
-    assets.root + "lib/Autolinker.js/dist/Autolinker.js",
-    assets.root + "lib/bootstrap/dist/js/bootstrap.min.js",
-    assets.root + "lib/lodash/lodash.min.js",
-    assets.root + "lib/mousetrap/mousetrap.min.js",
-    assets.root + "lib/ng-file-upload/ng-file-upload-all.min.js",
+
+    assets.bower + "alertifyjs/dist/js/alertify.js",
+    assets.bower + "angular/angular.js",
+    assets.bower + "angular-local-storage/dist/angular-local-storage.min.js",
+    assets.bower + "angular-sanitize/angular-sanitize.min.js",
+    assets.bower + "angular-ui-router/release/angular-ui-router.min.js",
+    assets.bower + "angular-ui-slider/src/slider.js",
+    assets.bower + "Autolinker.js/dist/Autolinker.min.js",
+    assets.bower + "bootstrap/dist/js/bootstrap.min.js",
+    assets.bower + "lodash/lodash.min.js",
+    assets.bower + "mousetrap/mousetrap.min.js",
+    assets.bower + "ng-file-upload/ng-file-upload-all.min.js",
+    assets.bower + "venturocket-angular-slider/build/angular-slider.min.js",
+
     assets.root + "lib/ui-bootstrap-custom-build/ui-bootstrap-custom-0.13.1.min.js",
 
     assets.js + "streama-app.js",

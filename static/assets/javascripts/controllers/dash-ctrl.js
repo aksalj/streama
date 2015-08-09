@@ -26,7 +26,7 @@ streamaApp.controller('dashCtrl', ['$scope', 'apiService', '$state', '$rootScope
       $scope.loading = false;
     })
     .error(function () {
-      alertify('A server error occured.');
+      alertify.alert('A server error occured.');
       $scope.loading = false;
     });
 
