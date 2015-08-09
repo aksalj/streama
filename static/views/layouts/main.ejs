@@ -36,21 +36,21 @@
       <%# if logged in %>
       <% if (auth.user) { %>
         <ul class="navigation">
-          <%# if user is content manager  %>
-          <% if (auth.user.roles.indexOf("ROLE_CONTENT_MANAGER") != -1 ) { %>
-            <li><a ui-sref="admin.shows">Admin</a></li>
-          <% } %>
-
-          <%# if user is admin but not content manager  %>
-          <% if (auth.user.roles.indexOf("ROLE_ADMIN") != -1 ) { %>
-            <% if (auth.user.roles.indexOf("ROLE_CONTENT_MANAGER") == -1 ) { %>
-              <li><a ui-sref="admin.users">Admin</a></li>
-            <% } %>
-          <% } %>
-
 
             <li><a ui-sref="dash">Dashboard</a></li>
+
+            <%# if user is content manager  %>
+            <% if (auth.user.roles.indexOf("ROLE_CONTENT_MANAGER") != -1 ) { %>
+              <li><a ui-sref="admin.shows">Manage Content</a></li>
+            <% } %>
+
             <li><a ui-sref="profile">Profile</a></li>
+
+            <%# if user is admin  %>
+            <% if (auth.user.roles.indexOf("ROLE_ADMIN") != -1 ) { %>
+              <li><a ui-sref="admin.users">Admin</a></li>
+            <% } %>
+
             <li><a href="<%= paths.logout %>">Logout</a></li>
 
         </ul>

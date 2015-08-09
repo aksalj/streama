@@ -20,7 +20,7 @@ var UserSchema = mongoose.Schema({
   lastUpdated: {type: Date, required: false},
   deleted: { type: Boolean, default: false },
 
-  username: {type: String, unique: true, required: true},
+  email: {type: String, unique: true, required: true},
   password: {type: String, required: true},
 
   enabled: { type: Boolean, default: false },
@@ -73,8 +73,8 @@ UserSchema.pre('update', function() {
 // Static methods
 
 // HUH: Use me for checkAvailability() as well
-UserSchema.statics.findByUsername = function(usrname, cb) {
-  return this.findOne({username: usrname}, cb);
+UserSchema.statics.findByEmail = function(email, cb) {
+  return this.findOne({email: email}, cb);
 };
 
 UserSchema.statics.findByUuid = function(uuid, cb) {

@@ -25,7 +25,7 @@ exports.sendUserJson = function (res, user) {
 
   var data = {
     id: user._id,
-    username: user.username,
+    username: user.email,
     authorities: user.roles,
     enabled: user.enabled,
     dateCreated: user.dateCreated,

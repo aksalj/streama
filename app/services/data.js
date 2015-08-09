@@ -25,10 +25,17 @@ var DEFAULT_ROLES = [
 
 var DEFAULT_USERS = [
   {
-    username: 'admin',
+    email: 'admin@streama.co.ke',
     password: 'admin',
     enabled: true,
-    roles:[]
+    roles:[DEFAULT_ROLES[0].authority, DEFAULT_ROLES[1].authority]
+  },
+
+  {
+    email: 'aksalj@streama.co.ke',
+    password: 'pwd',
+    enabled: true,
+    roles:[DEFAULT_ROLES[1].authority]
   }
 ];
 
@@ -49,13 +56,7 @@ var createDefaultRoles = function (cb) {
 
 };
 
-var createDefaultUsers = function (roles) {
-
-  // TODO: Give admin all roles?
-  roles.forEach(function(role) {
-    DEFAULT_USERS[0].roles.push(role.authority);
-  });
-
+var createDefaultUsers = function () {
 
   UserModel.collection.remove();
 
@@ -86,7 +87,7 @@ exports.populateWithDefaultData = function () {
     if(err){
       console.error(err);
     } else {
-      createDefaultUsers(roles);
+      createDefaultUsers();
     }
   });
 

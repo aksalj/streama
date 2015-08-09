@@ -26,12 +26,12 @@ var router = express.Router();
 
   passport.use(new LocalStrategy(
     {
-      usernameField: "j_username",
+      usernameField: "j_email",
       passwordField: "j_password"
     },
     function (username, password, done) {
-      var msg = "Sorry, we were not able to find a user with that username and/or password."; // i18n?
-      UserModel.findByUsername(username, function (err, user) {
+      var msg = "Sorry, we were not able to find a user with that email and/or password."; // i18n?
+      UserModel.findByEmail(username, function (err, user) {
         if (err) {
           return done(err);
         }
@@ -47,11 +47,11 @@ var router = express.Router();
   ));
 
   passport.serializeUser(function (user, done) {
-    done(null, user.username);
+    done(null, user.email);
   });
 
   passport.deserializeUser(function (id, done) {
-    UserModel.findByUsername(id, function (err, user) {
+    UserModel.findByEmail(id, function (err, user) {
       done(err, user);
     });
   });
