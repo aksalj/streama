@@ -1,11 +1,11 @@
 # streama
 
-[![Build Status](https://travis-ci.org/dularion/streama.svg?branch=master)](https://travis-ci.org/dularion/streama) [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/dularion/streama/blob/master/LICENSE.md) [![Join the chat at https://gitter.im/dularion/streama](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dularion/streama?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 Ever had a huge bookshelf full of shows and movies? Ever wanted to digitalize them, but didn't have a good way of organizing the files? Worry no more! Streama is your own personal Netflix for just such a purpose!
-
-
 [Visit the Promo-Website here!](http://dularion.github.io/streama/)
+
+###### Important
+This fork uses `express` & `mongodb` instead of `grail` & `mysql` because I don't like `Groovy`? The original work is at [https://github.com/dularion/streama](https://github.com/dularion/streama)
+
 
 ## Table of contents:
 - [Getting Started](#getting-started)
@@ -14,7 +14,7 @@ Ever had a huge bookshelf full of shows and movies? Ever wanted to digitalize th
   - [The Dashboard](#the-dashboard)
   - [The Player](#the-player)
   - [The Admin-Panel](#the-admin-panel)
-  - [The Users](#the-users) 
+  - [The Users](#the-users)
 - [Technical Details](#technical-details)
 - [Changelog](#changelog)
 - [Roadmap](#roadmap)
@@ -22,9 +22,11 @@ Ever had a huge bookshelf full of shows and movies? Ever wanted to digitalize th
 - [License](#license)
 
 # Getting Started
-- For local setup, please refer to [Local Streama Setup](https://github.com/dularion/streama/wiki/Local-Streama-Setup)
-- For remote setup, please refer to [Streama on a remote Ubuntu 14.04](https://github.com/dularion/streama/wiki/Setup-Streama-on-Ubuntu-14.04)
-- For developers, please refer to [Streama for development](https://github.com/dularion/streama/wiki/Set-Up-Streama-for-Development)
+Fire up your `mongodb`, then:
+```shell
+$ npm install
+$ npm start
+```
 
 # The Application
 
@@ -47,8 +49,8 @@ If a Movie or Episode does not contain any video-files, it won't show up in the 
 ### The Player
 ![Streama Player](http://new.tinygrab.com/d9072ef56407e5d1ac40fab040aedc398a9abb3609.png)
 
-The Streama-Player is (heavily) inspired by Netflix, so you get all the good stuff from there. For Shows, there is a "next episode" button and a handy episode/season browser. There are also the basics: volume-control, play/pause, and fullscreen. 
-Later down the road I will add a feature to add subtitles and switch between video-files (for instance for different quality uploads). 
+The Streama-Player is (heavily) inspired by Netflix, so you get all the good stuff from there. For Shows, there is a "next episode" button and a handy episode/season browser. There are also the basics: volume-control, play/pause, and fullscreen.
+Later down the road I will add a feature to add subtitles and switch between video-files (for instance for different quality uploads).
 The player is HTML5-based and has only really been tested in Chrome so far.
 
 ##### The Episode Browser
@@ -74,12 +76,7 @@ Uploading video-files for each episode is as easy as drag-and-drop!
 Users can be invited and managed in the admin-panel. By default, they are non-admins, meaning they can only view videos, not create them. You can make them admins with the press of a button. Since there is user-administration in place, I plan on expanding on this a lot! Another feature I want to add is the ability for users to add and administer some form of playlists. There is a lot of potential to make this even better!
 
 # Technical Details
-This application is web-based and is programmed with [Grails 2.4.4](https://grails.org/) and MySQL. For login & user-handling [SpringSecurity](http://projects.spring.io/spring-security/) is used. For the most part, Grails is only there to generate REST-endpoints for the frontend. For all the front-end components, [AngularJS](https://angularjs.org/) is used. The player is completely HTML5-based, meaning there are limitations as to which file-types can be played at the moment.
-
-The application uses Grails for the REST-API, and AngularJS for the frontend. If you don't like grails, you can also just use the frontend components and add your own REST-API for handling all the data :)
-
-As an API for all the movies and shows I used the awesome API from theMovieDatabase.
-[![theMovieDatabase](https://d3a8mw37cqal2z.cloudfront.net/images/header_v2.png)](https://www.themoviedb.org/documentation/api)
+`TODO`
 
 # Changelog
 Please refer to [Change Log](https://github.com/dularion/streama/blob/master/CHANGELOG.md)
@@ -89,7 +86,7 @@ These [enhancement-issues](https://github.com/dularion/streama/issues?q=is%3Aope
 
 At this point I would like to mention that this project is still very much a work-in-progress. I will be adding new features and bugfixes often and quickly, but this is first and foremost a hobby project, so the time that I can spend on it is limited. If you want to contibute, feel free! I will be honored by each and every Pull request :)
 
-Btw, if you have any issues getting started, let me know. I will gladly help out and then improve the docs accordingly. 
+Btw, if you have any issues getting started, let me know. I will gladly help out and then improve the docs accordingly.
 
 # Known Issues
 - There is no video-conversion currently, meaning you are reliant upon HTML5 browser compatibilities. I will implement server-side conversion soon which will enable this functionality. See Issue [#17](https://github.com/dularion/streama/issues/17)

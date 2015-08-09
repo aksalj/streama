@@ -1,0 +1,41 @@
+<div id='login'>
+	<div class='inner'>
+		<div class='fheader'>Please Login</div>
+
+    <% if (message) { %>
+			<div class='login_message'><%= message %></div>
+    <% } %>
+
+		<form action='<%= postUrl %>' method='POST' id='loginForm' class='cssform form-horizontal' autocomplete='off'>
+
+			<div class="form-group">
+				<label for="inputUsername" class="col-lg-2 control-label">Username</label>
+				<div class="col-lg-10">
+					<input id="inputUsername" type="text" name="j_username" class="form-control" placeholder="Username">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="inputPassword" class="col-lg-2 control-label">Password</label>
+				<div class="col-lg-10">
+					<input id="inputPassword" type="password" name='j_password' class="form-control" placeholder="Password">
+					<div class="checkbox">
+						<label>
+							<input type='checkbox' class='chk' name='<%= rememberMeParameter %>' id='remember_me' checked='checked'/> Remember me
+						</label>
+					</div>
+				</div>
+			</div>
+
+
+			<button class="btn btn-primary pull-right">Submit</button>
+		</form>
+	</div>
+</div>
+<script type='text/javascript'>
+	<!--
+	(function() {
+		document.forms['loginForm'].elements['j_username'].focus();
+	})();
+	// -->
+</script>

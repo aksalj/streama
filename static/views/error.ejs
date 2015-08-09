@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<% if (env.development) { %>
+      <title>Runtime Exception</title>
+		<% } else { %>
+      <title>Error</title>
+    <% } %>
+  </head>
+	<body>
+		<% if (env.development) { %>
+      <div><%= exception %></div>
+		<% } else { %>
+			<ul class="errors">
+				<li>An error has occurred</li>
+			</ul>
+    <% } %>
+	</body>
+</html>
