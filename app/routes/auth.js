@@ -17,7 +17,7 @@ var passport = require('passport');
 // Auth strategies
 var LocalStrategy = require('passport-local').Strategy;
 
-var uiService = require('../services/ui');
+var uiService = require('../services/streama/ui');
 var UserModel = require("../models").User;
 
 var router = express.Router();

@@ -41,7 +41,7 @@
         "email":"admin@streama.co.ke",
         "password":"admin",
         "enabled":true,
-        "roles":["ROLE_ADMIN"]
+        "roles":["ROLE_ADMIN","ROLE_CONTENT_MANAGER"]
       }
     ]
   }

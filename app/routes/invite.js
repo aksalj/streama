@@ -12,7 +12,7 @@
  */
 'use strict';
 var express = require('express');
-var uiService = require('../services/ui');
+var uiService = require('../services/streama/ui');
 
 var UserModel = require("../models/User");
 

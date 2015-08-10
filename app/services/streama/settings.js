@@ -13,12 +13,14 @@
 'use strict';
 var conf = require("config");
 var fse = require("fs-extra");
-var utils = require("../utils");
+var utils = require("../../utils/index");
 
 
 var protocol = conf.get("app.secure") ? "https://" : "http://";
 var port = conf.get("app.secure") ? conf.get("app.ssl.port") : conf.get("app.port");
 var BASE_URL = protocol + conf.get("app.host") + ":" + port + "/";
+
+var TMDb_API_KEY = conf.get("apiKeys.tmdb");
 
 var KEY_BASE_URL = "Base URL";
 var KEY_UPLOAD_DIRECTORY = "Upload Directory";
@@ -35,6 +37,7 @@ var DEFAULT_SETTINGS = [
 
   {
     settingsKey: KEY_TMDb_API_KEY,
+    value: TMDb_API_KEY,
     description: 'This API-key is required by the application to fetch all the nice Movie/Episode/Show data for you. ' +
     'Get one for free at https://www.themoviedb.org/',
     required: true
@@ -97,6 +100,10 @@ exports.getDefaultSettings = function () {
 
 exports.getBaseUrl = function () {
   return BASE_URL;
+};
+
+exports.getTMDbAPIkey = function () {
+  return TMDb_API_KEY;
 };
 
 

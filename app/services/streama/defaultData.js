@@ -12,9 +12,9 @@
  */
 'use strict';
 var conf = require("config");
-var UserModel = require("../models/User");
-var RoleModel = require("../models/Role");
-var SettingsModel = require("../models/Settings");
+var UserModel = require("../../models/User");
+var RoleModel = require("../../models/Role");
+var SettingsModel = require("../../models/Settings");
 
 var settingsService = require("./settings");
 

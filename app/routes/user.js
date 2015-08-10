@@ -14,7 +14,7 @@
 var express = require('express');
 
 var authService = require('../services/auth');
-var marshalService = require('../services/marshaller');
+var marshalService = require('../services/streama/marshaller');
 var UserModel = require("../models").User;
 
 var router = express.Router();

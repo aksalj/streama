@@ -23,7 +23,7 @@ var utils = require("./utils");
 var routes = require("./routes");
 var authService = require("./services/auth");
 var models = require("./models");
-var uiService = require("./services/ui");
+var uiService = require("./services/streama/ui");
 
 var app = express();
 
@@ -74,7 +74,7 @@ models.connect(function(err){
   if(err) throw err;
 
   // Insert default data.
-  require('./services/defaultData')();
+  require('./services/streama/defaultData')();
 
   // Start Http Server
   var options = conf.get("app.secure") ? conf.get("app.ssl") : null;

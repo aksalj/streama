@@ -13,8 +13,8 @@
 'use strict';
 var express = require('express');
 var SettingsModel = require('./../models/Settings');
-var marshal = require("./../services/marshaller");
-var settingsService = require("./../services/settings");
+var marshal = require("./../services/streama/marshaller");
+var settingsService = require("./../services/streama/settings");
 
 var router = express.Router();
 

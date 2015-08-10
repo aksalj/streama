@@ -14,7 +14,7 @@
 var express = require('express');
 
 var router = express.Router();
-var uiService = require("./../services/ui");
+var uiService = require("./../services/streama/ui");
 
 
 
