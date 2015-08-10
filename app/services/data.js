@@ -40,44 +40,49 @@ var DEFAULT_USERS = [
 ];
 
 
-var createDefaultRoles = function (cb) {
+var createDefaultRoles = function () {
 
-  RoleModel.collection.remove(); // Clear collection
-
-  RoleModel.create(DEFAULT_ROLES, function (err) {
-    var roles = [];
-    if(!err) {
-      for (var i = 1; i < arguments.length; i++) {
-        roles = roles.concat(arguments[i]);
+  var createIfAbsent = function (role) {
+    RoleModel.find({authority: role.authority}, function(err, found) {
+      if(!found) {
+        RoleModel.create(role, function (err) {
+          if(err){ console.error(err); }
+        });
       }
-    }
-    cb(err, roles);
-  });
+    });
+  };
+
+  DEFAULT_ROLES.forEach(createIfAbsent);
 
 };
 
 var createDefaultUsers = function () {
 
-  UserModel.collection.remove();
+  var createIfAbsent = function (userData) {
+    UserModel.findByEmail(userData.email, function (err, found) {
+      if (!found) {
+        UserModel.create(userData, function (err) {
+          if(err) { console.error(err); }
+        });
+      }
+    })
+  };
 
-  UserModel.create(DEFAULT_USERS, function (err) {
-    if(err) {
-      console.error(err);
-    }
-  });
-
+  DEFAULT_USERS.forEach(createIfAbsent);
 };
 
 var createDefaultSettings = function () {
 
-  SettingsModel.collection.remove();
-
-  SettingsModel.create(settingsService.DEFAULT_SETTINGS, function (err) {
-    if(err){
-      console.error(err);
-    }
-  });
-
+  var createIfAbsent = function (settings) {
+    SettingsModel.findBySettingsKey(settings.settingsKey, function (err, found) {
+      if (!found) {
+        SettingsModel.create(settings, function (err) {
+          if(err){ console.error(err); }
+        });
+      }
+    })
+  };
+  settingsService.DEFAULT_SETTINGS.forEach(createIfAbsent);
 };
 
 
