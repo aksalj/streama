@@ -14,9 +14,13 @@
 
 var settingsService = require("./settings");
 
-var sendJson = function (res, data) {
-
-  res.json(data);
+var sendJson = function (res, data, status) {
+  if(!status){
+    status = 200;
+  } else if (typeof status !== "number") {
+    status = 500;
+  }
+  res.status(status).json(data);
 };
 
 exports.sendJson = sendJson;

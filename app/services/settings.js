@@ -11,27 +11,33 @@
  *
  */
 'use strict';
+var fse = require("fs-extra");
+var utils = require("../utils");
 
 // TODO: Load these from a config file & DB
 
 var BASE_URL = "http://localhost:3000/";
 
+var KEY_BASE_URL = "Base URL";
+var KEY_UPLOAD_DIRECTORY = "Upload Directory";
+var KEY_TMDb_API_KEY = "TheMovieDB API key";
+
 var DEFAULT_SETTINGS = [
   {
-    settingsKey: 'Upload Directory',
+    settingsKey: KEY_UPLOAD_DIRECTORY,
     description: 'This setting provides the application with your desired upload-path for all files. ' +
     'The default so far has been /data/streama. Remember: if you change this path, copy all the files (that were previously added) into the new directory.',
     required: true
   },
 
   {
-    settingsKey: 'TheMovieDB API key',
+    settingsKey: KEY_TMDb_API_KEY,
     description: 'This API-key is required by the application to fetch all the nice Movie/Episode/Show data for you. Get one for free at https://www.themoviedb.org/',
     required: true
   },
 
   {
-    settingsKey: 'Base URL',
+    settingsKey: KEY_BASE_URL,
     value: BASE_URL,
     description: 'The Base-URL is used for the videos and the link in the invitation-email.',
     required: true
@@ -39,6 +45,64 @@ var DEFAULT_SETTINGS = [
 
 ];
 
+var validateDirectoryPermissions = function (uploadDir, cb) {
+  fse.mkdirp(uploadDir, function (err) {
+    var msg = "The directory could not be accessed by the application. Please make sure that the directory exists and that you set the correct permissions.";
+    if(err){
+      console.log(err);
+      cb(false, msg);
+    } else {
+      utils.fs.canWrite(uploadDir, function(err, yes) {
+        if(err){ console.error(err); }
 
-exports.DEFAULT_SETTINGS = DEFAULT_SETTINGS;
-exports.BASE_URL = BASE_URL;
+        var success = yes == true;
+        if(success) {
+          msg = "The directory was successfully accessed by the application";
+        }
+
+        cb(success, msg);
+      });
+    }
+  });
+
+};
+
+var validateTMDbAPIKey = function (apiKey, cb) {
+  /*
+   try {
+   theMovieDbService.validateApiKey(settingsInstance.value)
+   resultValue.success = true;
+   resultValue.message = "The API-Key is valid and can be used!";
+   }
+
+   catch (Exception io) {
+   resultValue.error = true;
+   resultValue.message = "Invalid API key: You must be granted a valid key.";
+   }
+   */
+
+  cb(false, "Not Implemented");
+};
+
+
+exports.getDefaultSettings = function () {
+  return DEFAULT_SETTINGS;
+};
+
+exports.getBaseUrl = function () {
+  return BASE_URL;
+};
+
+
+/**
+ *
+ * @param settings
+ * @param callback
+ */
+exports.validateSettings = function (settings, callback) {
+  if(settings.settingsKey === KEY_UPLOAD_DIRECTORY) {
+    validateDirectoryPermissions(settings.value, callback);
+  } else if (settings.settingsKey === KEY_TMDb_API_KEY) {
+    validateTMDbAPIKey(settings.value, callback);
+  }
+};

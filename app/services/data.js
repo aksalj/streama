@@ -82,7 +82,8 @@ var createDefaultSettings = function () {
       }
     })
   };
-  settingsService.DEFAULT_SETTINGS.forEach(createIfAbsent);
+  var defaultSettings = settingsService.getDefaultSettings();
+  defaultSettings.forEach(createIfAbsent);
 };
 
 

@@ -13,16 +13,18 @@
 'use strict';
 var settingsService = require("./settings");
 
-var assets = { root : "/assets/" };
+
+var paths = { root: settingsService.getBaseUrl() };
+paths.login = paths.root + "auth/login";
+paths.logout = paths.root + "auth/logout";
+
+var assets = { root : path.root + "/assets/" };
 assets.img = assets.root + "images/";
 assets.css = assets.root + "stylesheets/";
 assets.js = assets.root + "javascripts/";
 assets.lib = assets.root + "lib/";
 assets.bower = assets.lib + "bower_components/";
 
-var paths = { root: "/" };
-paths.login = paths.root + "auth/login";
-paths.logout = paths.root + "auth/logout";
 
 // Ideally these should be compiled into single files.
 var styles = [
@@ -104,7 +106,7 @@ exports.renderInviteEmail = function (req, res, user) {
 
   var data = {
     title: "Invitation",
-    inviteUrl: settingsService.BASE_URL + "/invite?uuid=" + user.uuid
+    inviteUrl: settingsService.getBaseUrl() + "/invite?uuid=" + user.uuid
   };
   res.render("mail/userInvite", data);
 
