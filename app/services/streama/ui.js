@@ -89,6 +89,7 @@ var scripts = [
 
 exports.render = function (req, res, data) {
   data.title = data.title || "Streama";
+  data.layout = data.layout || "layouts/main";
 
   data.view = data.view || null;
   data.auth = {
@@ -100,7 +101,7 @@ exports.render = function (req, res, data) {
   data.styles = styles;
   data.scripts = scripts;
 
-  res.render("layouts/main", data);
+  res.render(data.layout, data);
 };
 
 exports.renderEmail = function(user, callback) {

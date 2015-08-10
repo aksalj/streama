@@ -26,7 +26,7 @@
       <%- include(view.head.path, view.head.data); %>
     <% } %>
 	</head>
-	<body>
+	<body ng-init="baseData.redirected = false">
 
 		<header class="main" ng-if="!isCurrentState('player')">
 			<a class="logo" ui-sref="dash">

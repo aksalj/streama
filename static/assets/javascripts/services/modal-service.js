@@ -22,7 +22,7 @@ streamaApp.factory('modalService', ['$modal', function ($modal) {
 
 		movieModal: function (movie, callback) {
 			var modalInstance = $modal.open({
-				templateUrl: 'modal--movie.htm',
+				templateUrl: 'modal--movie.tpl.htm',
 				controller: 'modalMovieCtrl',
 				size: 'lg',
 				resolve: {
@@ -40,7 +40,7 @@ streamaApp.factory('modalService', ['$modal', function ($modal) {
 
 		videoModal: function (video, isManual, tvShow, callback) {
 			var modalInstance = $modal.open({
-				templateUrl: 'modal--video.htm',
+				templateUrl: 'modal--video.tpl.htm',
 				controller: 'modalVideoCtrl',
 				size: 'lg',
 				resolve: {
@@ -95,7 +95,7 @@ streamaApp.factory('modalService', ['$modal', function ($modal) {
 
     fileManagerModal: function (video, callback) {
       var modalInstance = $modal.open({
-        templateUrl: 'modal--manage-files.htm',
+        templateUrl: 'modal--manage-files.tpl.htm',
         controller: 'modalFileCtrl',
         size: 'lg',
         backdrop: 'static',

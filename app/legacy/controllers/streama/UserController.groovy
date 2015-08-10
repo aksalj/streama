@@ -193,7 +193,7 @@ class UserController {
   }
 
   def loginTarget() {
-    redirect(uri: '/')
+    redirect(uri: '/', params: [redirected: true])
   }
 
 }
