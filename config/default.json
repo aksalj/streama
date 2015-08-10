@@ -1,0 +1,48 @@
+{
+
+  "app":{
+    "host":"127.0.0.1",
+    "port":3000,
+    "secure":false,
+    "ssl": {
+      "port":3443,
+      "key":null,
+      "cert":null,
+      "ca":null
+    }
+  },
+
+  "database":{
+    "host":"127.0.0.1",
+    "port":27017,
+    "name":"streama",
+    "user": null,
+    "password": null,
+    "keepAlive": true
+  },
+
+  "apiKeys":{
+    "tmdb":null
+  },
+
+  "defaultData":{
+    "roles":[
+      {
+        "authority":"ROLE_ADMIN",
+        "displayName":"Admin"
+      },
+      {
+        "authority":"ROLE_CONTENT_MANAGER",
+        "displayName":"Content Manager"
+      }
+    ],
+    "users":[
+      {
+        "email":"admin@streama.co.ke",
+        "password":"admin",
+        "enabled":true,
+        "roles":["ROLE_ADMIN"]
+      }
+    ]
+  }
+}

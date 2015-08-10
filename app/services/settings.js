@@ -11,12 +11,14 @@
  *
  */
 'use strict';
+var conf = require("config");
 var fse = require("fs-extra");
 var utils = require("../utils");
 
-// TODO: Load these from a config file & DB
 
-var BASE_URL = "http://localhost:3000/";
+var protocol = conf.get("app.secure") ? "https://" : "http://";
+var port = conf.get("app.secure") ? conf.get("app.ssl.port") : conf.get("app.port");
+var BASE_URL = protocol + conf.get("app.host") + ":" + port + "/";
 
 var KEY_BASE_URL = "Base URL";
 var KEY_UPLOAD_DIRECTORY = "Upload Directory";
@@ -26,13 +28,15 @@ var DEFAULT_SETTINGS = [
   {
     settingsKey: KEY_UPLOAD_DIRECTORY,
     description: 'This setting provides the application with your desired upload-path for all files. ' +
-    'The default so far has been /data/streama. Remember: if you change this path, copy all the files (that were previously added) into the new directory.',
+    'The default so far has been /data/streama. Remember: if you change this path, copy all the files ' +
+    '(that were previously added) into the new directory.',
     required: true
   },
 
   {
     settingsKey: KEY_TMDb_API_KEY,
-    description: 'This API-key is required by the application to fetch all the nice Movie/Episode/Show data for you. Get one for free at https://www.themoviedb.org/',
+    description: 'This API-key is required by the application to fetch all the nice Movie/Episode/Show data for you. ' +
+    'Get one for free at https://www.themoviedb.org/',
     required: true
   },
 
@@ -46,10 +50,12 @@ var DEFAULT_SETTINGS = [
 ];
 
 var validateDirectoryPermissions = function (uploadDir, cb) {
+
   fse.mkdirp(uploadDir, function (err) {
-    var msg = "The directory could not be accessed by the application. Please make sure that the directory exists and that you set the correct permissions.";
+    var msg = "The directory could not be accessed by the application. Please make sure that the directory exists and " +
+      "that you set the correct permissions.";
     if(err){
-      console.log(err);
+      console.error(err);
       cb(false, msg);
     } else {
       utils.fs.canWrite(uploadDir, function(err, yes) {

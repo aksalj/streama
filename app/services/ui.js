@@ -18,7 +18,7 @@ var paths = { root: settingsService.getBaseUrl() };
 paths.login = paths.root + "auth/login";
 paths.logout = paths.root + "auth/logout";
 
-var assets = { root : path.root + "/assets/" };
+var assets = { root : paths.root + "assets/" };
 assets.img = assets.root + "images/";
 assets.css = assets.root + "stylesheets/";
 assets.js = assets.root + "javascripts/";

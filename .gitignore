@@ -10,3 +10,8 @@
 node_modules/
 bower_components/
 
+# Local configs & logs
+config/development.json
+config/runtime.json
+log/
+*.pem

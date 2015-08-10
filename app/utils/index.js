@@ -12,4 +12,6 @@
  */
 'use strict';
 
+exports.HttpServer = require("./httpServer");
+exports.logger = require("./logger");
 exports.fs = require("./fsUtils");

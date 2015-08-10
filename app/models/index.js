@@ -11,10 +11,8 @@
  *
  */
 'use strict';
+var conf = require("config");
 var mongoose = require('mongoose');
-
-// TODO: Load DB config
-mongoose.connect('mongodb://localhost:27017/stream');
 
 
 exports.User = require("./User");
@@ -27,3 +25,22 @@ exports.TvShow = require("./TvShow");
 exports.Movie = require("./Movie");
 exports.Video = require("./Video");
 exports.ViewingStatus = require("./ViewingStatus");
+
+
+exports.connect = function (callback) {
+  var uri = "mongodb://" + conf.get("database.host") + ":" + conf.get("database.port");
+  uri += "/" + conf.get("database.name");
+
+  var options = {
+    user:conf.get("database.user"),
+    pass:conf.get("database.password"),
+    server:{},
+    replset:{}
+  };
+
+  if(conf.get("database.keepAlive")) {
+    options.server.socketOptions = options.replset.socketOptions = { keepAlive: 1 };
+  }
+
+  mongoose.connect(uri, options, callback);
+};

@@ -11,6 +11,7 @@
  *
  */
 'use strict';
+var conf = require("config");
 var express = require('express');
 var passport = require('passport');
 var bodyParser = require('body-parser');
@@ -18,19 +19,18 @@ var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session');
 var flash = require('connect-flash');
 
-var morgan = require('morgan'); // HUH debug only
-
+var utils = require("./utils");
 var routes = require("./routes");
 var authService = require("./services/auth");
-var dataService = require('./services/data');
+var models = require("./models");
 var uiService = require("./services/ui");
-
-dataService.populateWithDefaultData(); // FIXME: Do this on first launch only
 
 var app = express();
 
+// Logs
+utils.logger.setup(app, conf.util.getEnv('NODE_ENV'));
+
 // Parsers
-app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(cookieSession({ name: "streama", keys: ["98dVrs6twA", "yQfDCdJQbg"] }));
 app.use(bodyParser.json());
@@ -45,6 +45,7 @@ app.set('views', 'static/views');
 app.use(express.static('static'));
 // FIXME: Find cleaner way of doing this
 app.use(express.static('static/assets/javascripts/streama-app/templates'));
+app.use("/assets/fonts", express.static('static/assets/lib/bower_components/bootstrap/fonts'));
 app.use("/template", express.static('static/assets/lib/bower_components/angular-ui-bootstrap/template'));
 
 // Routes
@@ -67,9 +68,23 @@ app.use(function (req, res) {
 });
 
 
-var server = app.listen(3000, function () {
-  var host = server.address().address;
-  var port = server.address().port;
+// Connect to DB and Start API Server
+console.log('connecting to database....');
+models.connect(function(err){
+  if(err) throw err;
 
-  console.log('Streama listening at http://%s:%s', host, port);
+  // Insert default data.
+  require('./services/defaultData')();
+
+  // Start Http Server
+  var options = conf.get("app.secure") ? conf.get("app.ssl") : null;
+  var httpServer = new utils.HttpServer(app, options);
+  var server = httpServer.start(conf.get("app.host"), conf.get("app.port"), function() {
+    var host = server.address().address;
+    var port = server.address().port;
+
+    console.log('Streama listening at http%s://%s:%s', (conf.get("app.secure") ? "s" : ""), host, port);
+  });
+
 });
+

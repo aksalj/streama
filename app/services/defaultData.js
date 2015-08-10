@@ -11,34 +11,12 @@
  *
  */
 'use strict';
+var conf = require("config");
 var UserModel = require("../models/User");
 var RoleModel = require("../models/Role");
 var SettingsModel = require("../models/Settings");
 
 var settingsService = require("./settings");
-
-// TODO: Load these from a config file
-var DEFAULT_ROLES = [
-  {authority: "ROLE_ADMIN", displayName:"Admin"},
-  {authority: "ROLE_CONTENT_MANAGER", displayName:"Content Manager"}
-];
-
-var DEFAULT_USERS = [
-  {
-    email: 'admin@streama.co.ke',
-    password: 'admin',
-    enabled: true,
-    roles:[DEFAULT_ROLES[0].authority, DEFAULT_ROLES[1].authority]
-  },
-
-  {
-    email: 'aksalj@streama.co.ke',
-    password: 'pwd',
-    enabled: true,
-    roles:[DEFAULT_ROLES[1].authority]
-  }
-];
-
 
 var createDefaultRoles = function () {
 
@@ -52,7 +30,8 @@ var createDefaultRoles = function () {
     });
   };
 
-  DEFAULT_ROLES.forEach(createIfAbsent);
+  var roles = conf.get("defaultData.roles");
+  roles.forEach(createIfAbsent);
 
 };
 
@@ -68,7 +47,8 @@ var createDefaultUsers = function () {
     })
   };
 
-  DEFAULT_USERS.forEach(createIfAbsent);
+  var users = conf.get("defaultData.users");
+  users.forEach(createIfAbsent);
 };
 
 var createDefaultSettings = function () {
@@ -87,15 +67,9 @@ var createDefaultSettings = function () {
 };
 
 
-exports.populateWithDefaultData = function () {
-
-  createDefaultRoles(function(err, roles) {
-    if(err){
-      console.error(err);
-    } else {
-      createDefaultUsers();
-    }
-  });
-
+exports = module.exports = function (){
+  createDefaultRoles();
+  createDefaultUsers();
   createDefaultSettings();
+  return true;
 };
