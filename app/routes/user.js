@@ -90,7 +90,24 @@ router.get('/availableRoles.json', function(req, res) {
  * Change password
  */
 router.post('/changePassword.json', function(req, res) {
-  res.end();
+  var old = req.body.oldPassword;
+  var newPwd = req.body.newPassword;
+  var newRepeatPwd = req.body.repeatPassword;
+  if (newPwd !== newRepeatPwd) {
+    marshalService.sendJson(res, {message: "Passwords do not match"}, 400);
+    return;
+  }
+
+  var user = req.user;
+  user.changePassword(old, newPwd, function(err) {
+    if(err){
+      console.error(err);
+      var msg = (typeof err == "string") ? err : "Check your password!";
+      marshalService.sendJson(res, {message: msg}, 400);
+    } else {
+      res.sendStatus(200);
+    }
+  });
 });
 
 module.exports = router;

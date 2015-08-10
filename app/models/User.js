@@ -92,10 +92,12 @@ UserSchema.methods.validPassword = function (password) {
   return isValidPassword(password, this.password);
 };
 
-UserSchema.methods.changePassword = function (current, password, cb) {
+UserSchema.methods.changePassword = function (current, newPwd, cb) {
   if (isValidPassword(current, this.password)) {
-    this.password = hashPassword(password);
+    this.password = newPwd; // will hash in pre save
     this.save(cb);
+  } else {
+    cb("Invalid Password!");
   }
 };
 
