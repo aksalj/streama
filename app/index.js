@@ -25,7 +25,7 @@ var authService = require("./services/auth");
 var models = require("./models");
 var uiService = require("./services/streama/ui");
 
-var app = express();
+var app = module.exports = express(); // Allow for circular dependency
 
 // Logs
 utils.logger.setup(app, conf.util.getEnv('NODE_ENV'));
@@ -87,6 +87,5 @@ models.connect(function(err){
 
     console.log('Streama listening at http%s://%s:%s', (conf.get("app.secure") ? "s" : ""), host, port);
   });
-
 });
 

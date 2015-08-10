@@ -74,10 +74,16 @@ UserSchema.pre('update', function() {
 
 // HUH: Use me for checkAvailability() as well
 UserSchema.statics.findByEmail = function(email, cb) {
+  if(!email){
+    return cb("Invalid email");
+  }
   return this.findOne({email: email}, cb);
 };
 
 UserSchema.statics.findByUuid = function(uuid, cb) {
+  if(!uuid){
+    return cb("Invalid uuid");
+  }
   return this.findOne({uuid: uuid}, cb);
 };
 

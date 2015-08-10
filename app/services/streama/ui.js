@@ -101,15 +101,16 @@ exports.render = function (req, res, data) {
   res.render("layouts/main", data);
 };
 
-exports.renderInviteEmail = function (req, res, user) {
-  // HUH: user is user to be invited?
+exports.renderEmail = function(user, callback) {
 
-  var data = {
+  var emailData = {
     title: "Invitation",
     inviteUrl: settingsService.getBaseUrl() + "/invite?uuid=" + user.uuid
   };
-  res.render("mail/userInvite", data);
 
+  //
+  var app = require("../../index");
+  app.render('mail/userInvite', emailData, callback);
 };
 
 exports.showError = function (req, res, error) {

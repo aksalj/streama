@@ -44,9 +44,12 @@
     "fs-extra": "^0.23.1",
     "mongoose": "4.1.1",
     "morgan": "^1.6.1",
+    "nodemailer": "^1.4.0",
+    "nodemailer-direct-transport": "^1.0.2",
     "passport": "0.2.2",
     "passport-local": "1.0.0",
-    "request": "^2.60.0"
+    "request": "^2.60.0",
+    "uuid": "^2.0.1"
   },
   "devDependencies": {
     "request-debug": "*"

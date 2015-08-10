@@ -22,7 +22,7 @@ var createDefaultRoles = function () {
 
   var createIfAbsent = function (role) {
     RoleModel.find({authority: role.authority}, function(err, found) {
-      if(!found) {
+      if(!found || found.length == 0) {
         RoleModel.create(role, function (err) {
           if(err){ console.error(err); }
         });
