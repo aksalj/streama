@@ -52,6 +52,8 @@ app.use("/template", express.static('static/assets/lib/bower_components/angular-
 //    API
 app.use("/user(.json)?", authService.ensureAuthenticated, routes.UserRoutes);
 app.use("/settings(.json)?", authService.ensureAuthenticated, routes.SettingsRoutes);
+app.use("/theMovieDb", authService.ensureAuthenticated, routes.TMDbRoutes);
+
 
 //    UI
 app.use("/auth", routes.AuthRoutes);

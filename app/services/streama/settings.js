@@ -14,6 +14,9 @@
 var conf = require("config");
 var fse = require("fs-extra");
 var utils = require("../../utils/index");
+var TMDb = require("../theMovieDb");
+
+var SettingsModel = require("../../models").Settings;
 
 
 var protocol = conf.get("app.secure") ? "https://" : "http://";
@@ -77,20 +80,14 @@ var validateDirectoryPermissions = function (uploadDir, cb) {
 };
 
 var validateTMDbAPIKey = function (apiKey, cb) {
-  /*
-   try {
-   theMovieDbService.validateApiKey(settingsInstance.value)
-   resultValue.success = true;
-   resultValue.message = "The API-Key is valid and can be used!";
-   }
-
-   catch (Exception io) {
-   resultValue.error = true;
-   resultValue.message = "Invalid API key: You must be granted a valid key.";
-   }
-   */
-
-  cb(false, "Not Implemented");
+  var tmdb = new TMDb(apiKey, true);
+  tmdb.hasValidKey(function(err, valid) {
+    var msg = "Invalid API key: You must have granted a valid key.";
+    if (valid) {
+      msg = "The API-Key is valid and can be used!";
+    }
+    cb(valid, msg);
+  });
 };
 
 
@@ -102,8 +99,12 @@ exports.getBaseUrl = function () {
   return BASE_URL;
 };
 
-exports.getTMDbAPIkey = function () {
-  return TMDb_API_KEY;
+exports.getTMDbAPIkey = function (callback) {
+  if(typeof callback == "function") { // Read Key from DB
+    SettingsModel.findBySettingsKey(KEY_TMDb_API_KEY, callback);
+  } else { // Key from config file
+    return TMDb_API_KEY;
+  }
 };
 
 

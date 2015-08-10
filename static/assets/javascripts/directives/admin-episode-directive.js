@@ -4,7 +4,7 @@ streamaApp.directive('adminEpisode', [
 	'uploadService', 'modalService', 'apiService', function (uploadService, modalService, apiService) {
 	return {
 		restrict: 'AE',
-		templateUrl: 'directive--admin-episode.htm',
+		templateUrl: 'directive--admin-episode.tpl.htm',
 		scope: {
 			episode: '='
 		},

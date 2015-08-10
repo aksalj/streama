@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/aksalj/streama#readme",
   "dependencies": {
+    "async": "^1.4.2",
     "bcrypt": "0.8.4",
     "body-parser": "1.13.3",
     "config": "^1.15.0",
@@ -44,6 +45,10 @@
     "mongoose": "4.1.1",
     "morgan": "^1.6.1",
     "passport": "0.2.2",
-    "passport-local": "1.0.0"
+    "passport-local": "1.0.0",
+    "request": "^2.60.0"
+  },
+  "devDependencies": {
+    "request-debug": "*"
   }
 }
