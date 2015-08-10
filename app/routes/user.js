@@ -65,7 +65,17 @@ router.post('/saveAndInviteUser.json', function(req, res) {
  * Save Profile
  */
 router.post('/saveProfile.json', function(req, res) {
-  res.end();
+  var userData = req.body;
+  var id = userData.id;
+  delete userData.id;
+  UserModel.findOneAndUpdate({_id: id}, userData, function(err) {
+    if(err){
+      console.error(err);
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
+    }
+  });
 });
 
 /**
