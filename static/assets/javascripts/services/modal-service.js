@@ -4,7 +4,7 @@ streamaApp.factory('modalService', ['$modal', function ($modal) {
 	return{
 		tvShowModal: function (tvShow, callback) {
 			var modalInstance = $modal.open({
-				templateUrl: 'modal--tvShow.tpl.htm',
+				templateUrl: 'modal--tvShow.htm',
 				controller: 'modalTvShowCtrl',
 				size: 'lg',
 				resolve: {
@@ -22,7 +22,7 @@ streamaApp.factory('modalService', ['$modal', function ($modal) {
 
 		movieModal: function (movie, callback) {
 			var modalInstance = $modal.open({
-				templateUrl: 'modal--movie.tpl.htm',
+				templateUrl: 'modal--movie.htm',
 				controller: 'modalMovieCtrl',
 				size: 'lg',
 				resolve: {
@@ -40,7 +40,7 @@ streamaApp.factory('modalService', ['$modal', function ($modal) {
 
 		videoModal: function (video, isManual, tvShow, callback) {
 			var modalInstance = $modal.open({
-				templateUrl: 'modal--video.tpl.htm',
+				templateUrl: 'modal--video.htm',
 				controller: 'modalVideoCtrl',
 				size: 'lg',
 				resolve: {
@@ -65,7 +65,7 @@ streamaApp.factory('modalService', ['$modal', function ($modal) {
 
 		openFileBrowser: function (callback) {
 			var modalInstance = $modal.open({
-				templateUrl: 'modal--file-browser.tpl.htm',
+				templateUrl: 'modal--file-browser.htm',
 				controller: 'modalFileBrowserCtrl',
 				size: 'lg'
 			});
@@ -76,27 +76,9 @@ streamaApp.factory('modalService', ['$modal', function ($modal) {
 		},
 
 
-		fileModal: function (video, callback) {
-			var modalInstance = $modal.open({
-				templateUrl: 'modal--file.tpl.htm',
-				controller: 'modalFileCtrl',
-				size: 'lg',
-				resolve: {
-					video: function () {
-						return video;
-					}
-				}
-			});
-
-			modalInstance.result.then(function (data) {
-				(callback || angular.noop)(data);
-			});
-		},
-
-
 		userModal: function (user, callback) {
 			var modalInstance = $modal.open({
-				templateUrl: 'modal--user.tpl.htm',
+				templateUrl: 'modal--user.htm',
 				controller: 'modalUserCtrl',
 				size: 'lg',
 				resolve: {
@@ -109,6 +91,25 @@ streamaApp.factory('modalService', ['$modal', function ($modal) {
 			modalInstance.result.then(function (data) {
 				(callback || angular.noop)(data);
 			});
-		}
+		},
+
+    fileManagerModal: function (video, callback) {
+      var modalInstance = $modal.open({
+        templateUrl: 'modal--manage-files.htm',
+        controller: 'modalFileCtrl',
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        resolve: {
+          video: function () {
+            return video;
+          }
+        }
+      });
+
+      modalInstance.result.then(function (data) {
+        (callback || angular.noop)(data);
+      });
+    }
 	};
 }]);
