@@ -101,7 +101,13 @@ exports.getBaseUrl = function () {
 
 exports.getTMDbAPIkey = function (callback) {
   if(typeof callback == "function") { // Read Key from DB
-    SettingsModel.findBySettingsKey(KEY_TMDb_API_KEY, callback);
+    SettingsModel.findBySettingsKey(KEY_TMDb_API_KEY, function(err, settings){
+      if(!err && settings && settings.value) {
+        callback(null, settings.value);
+      } else {
+        callback(err);
+      }
+    });
   } else { // Key from config file
     return TMDb_API_KEY;
   }

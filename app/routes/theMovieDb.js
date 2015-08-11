@@ -23,7 +23,7 @@ var router = express.Router();
 var tmdb = new TMDb(settingsService.getTMDbAPIkey());
 settingsService.getTMDbAPIkey(function(err, settings) {
   if (!err && settings && settings.value) {
-    tmdb = new TMDb(settingsService.getTMDbAPIkey());
+    tmdb = new TMDb(settings.value);
   }
 });
 
