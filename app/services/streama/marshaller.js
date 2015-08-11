@@ -104,6 +104,34 @@ exports.sendFileJson = function (res, file) {
 };
 exports.sendMovieJson = function (res, movie) {};
 exports.sendVideoJson = function (res, video) {};
+
 exports.sendFullShowJson = function (res, tvShow) {};
-exports.sendFullViewingStatusJson = function (res, viewingStatus) {};
+
+exports.makeFullViewingStatusJson = function (viewingStatus) {
+
+  var makeJSON = function (status) {
+    return  {
+      id: status.id,
+      dateCreated: status.dateCreated,
+      lastUpdated: status.lastUpdated,
+      video: status.video,
+      tvShow: status.tvShow,
+      user: status.user,
+      currentPlayTime: status.currentPlayTime,
+      runtime: status.runtime
+    };
+  };
+
+  if(viewingStatus instanceof Array) {
+    var data = [];
+    viewingStatus.forEach(function(status) {
+      data.push(makeJSON(status));
+    });
+    return data;
+  } else {
+    return makeJSON(viewingStatus);
+  }
+
+};
+
 exports.sendFullMovieJson = function(res, movie) {};
