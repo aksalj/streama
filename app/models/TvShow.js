@@ -34,7 +34,7 @@ var TvShowSchema = mongoose.Schema({
   vote_count: Number,
   popularity: Number,
 
-  episodes:[{type: Schema.ObjectId, ref: 'EpisodeSchema'}]
+  episodes:[{type: mongoose.Schema.ObjectId, ref: 'EpisodeSchema'}]
 
 });
 

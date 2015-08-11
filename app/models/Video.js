@@ -27,7 +27,7 @@ var VideoSchema = mongoose.Schema({
 
   imdb_id: String,
 
-  files: [{type: Schema.ObjectId, ref: "FileSchema"}]
+  files: [{type: mongoose.Schema.ObjectId, ref: "FileSchema"}]
 
 }, {discriminatorKey : '_type' });
 

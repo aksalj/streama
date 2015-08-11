@@ -12,6 +12,7 @@
  */
 'use strict';
 var mongoose = require('mongoose');
+var extend = require('mongoose-schema-extend');
 var VideoSchema = require("./Video").schema;
 
 String.prototype.padLeft = function(l,c) {
@@ -27,7 +28,7 @@ var EpisodeSchema = VideoSchema.extend({
 
   still_path: String,
 
-  show: {type: Schema.ObjectId, ref: "TvShowSchema"}
+  show: {type: mongoose.Schema.ObjectId, ref: "TvShowSchema"}
 
 });
 
