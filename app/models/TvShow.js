@@ -43,10 +43,11 @@ TvShowSchema.statics.findAllNotDeleted = function(callback) {
 };
 
 TvShowSchema.methods.getExternalLinks = function(callback) {
+  var that = this;
   settingsService.getTMDbAPIkey(function(err, key) {
     if(key) {
-      var tmdb = new TMDb(key);
-      tmdb.getExternalLinks(this.apiId, callback);
+      var tmdb = new TMDb(key, true);
+      tmdb.getExternalLinks(that.apiId, callback);
     } else {
       callback(err);
     }

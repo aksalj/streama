@@ -56,6 +56,16 @@ var sendJson = function (res, data, status) {
   } else if (typeof status !== "number") {
     status = 500;
   }
+
+  try{ // Do not confuse the ids (_id vs id) used by frontend
+    data = data.toJSON();
+    if (data._id && !data.id) {
+      data.id = data._id;
+    }
+  }catch(e){
+    //console.warn(e);
+  }
+
   res.status(status).json(data);
 };
 
@@ -105,7 +115,47 @@ exports.sendFileJson = function (res, file) {
 exports.sendMovieJson = function (res, movie) {};
 exports.sendVideoJson = function (res, video) {};
 
-exports.sendFullShowJson = function (res, tvShow) {};
+exports.makeFullShowJson = function (tvShow) {
+
+  var makeJSON = function (show) {
+    var episodesWithFiles = 0;
+
+    show.episodes.forEach(function(episode) {
+      if (episode.files) {
+        episodesWithFiles++;
+      }
+    });
+
+    return  {
+      id: show.id,
+      dateCreated: show.dateCreated,
+      lastUpdated: show.lastUpdated,
+      name: show.name,
+      overview: show.overview,
+      apiId: show.apiId,
+      backdrop_path: show.backdrop_path,
+      poster_path: show.poster_path,
+      first_air_date: show.first_air_date,
+      original_language: show.original_language,
+      vote_average: show.vote_average,
+      imdb_id: show.imdb_id,
+      popularity: show.popularity,
+      episodesWithFilesCount: episodesWithFiles,
+      episodesCount: show.episodes.length
+    };
+  };
+
+  if(tvShow instanceof Array) {
+    var data = [];
+    tvShow.forEach(function(show) {
+      data.push(makeJSON(show));
+    });
+    return data;
+  } else {
+    return makeJSON(tvShow);
+  }
+
+};
 
 exports.makeFullViewingStatusJson = function (viewingStatus) {
 

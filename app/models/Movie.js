@@ -27,10 +27,11 @@ var MovieSchema = VideoSchema.extend({
 
 
 MovieSchema.methods.getSimilarMovies = function (callback) {
+  var that = this;
   settingsService.getTMDbAPIkey(function(err, key) {
     if(key) {
       var tmdb = new TMDb(key);
-      tmdb.getSimilarMovies(this.apiId, callback);
+      tmdb.getSimilarMovies(that.apiId, callback);
     } else {
       callback(err);
     }
@@ -38,10 +39,11 @@ MovieSchema.methods.getSimilarMovies = function (callback) {
 };
 
 MovieSchema.methods.getFullMovieMeta = function (callback) {
+  var that = this;
   settingsService.getTMDbAPIkey(function(err, key) {
     if(key) {
       var tmdb = new TMDb(key);
-      tmdb.getFullMovieMeta(this.apiId, callback);
+      tmdb.getFullMovieMeta(that.apiId, callback);
     } else {
       callback(err);
     }
