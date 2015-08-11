@@ -11,3 +11,41 @@
  *
  */
 'use strict';
+var mongoose = require('mongoose');
+var extend = require('mongoose-schema-extend');
+var VideoSchema = require("./Video").schema;
+
+var TMDb = require('../services/theMovieDb');
+var settingsService = require("../services/streama/settings");
+
+var MovieSchema = VideoSchema.extend({
+  title: String,
+  release_date: String,
+  backdrop_path: String,
+  poster_path: String
+});
+
+
+MovieSchema.methods.getSimilarMovies = function (callback) {
+  settingsService.getTMDbAPIkey(function(err, key) {
+    if(key) {
+      var tmdb = new TMDb(key);
+      tmdb.getSimilarMovies(this.apiId, callback);
+    } else {
+      callback(err);
+    }
+  });
+};
+
+MovieSchema.methods.getFullMovieMeta = function (callback) {
+  settingsService.getTMDbAPIkey(function(err, key) {
+    if(key) {
+      var tmdb = new TMDb(key);
+      tmdb.getFullMovieMeta(this.apiId, callback);
+    } else {
+      callback(err);
+    }
+  });
+};
+
+module.exports = mongoose.model("Movie", MovieSchema);

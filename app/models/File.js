@@ -11,3 +11,24 @@
  *
  */
 'use strict';
+var mongoose = require('mongoose');
+
+var FileSchema = mongoose.Schema({
+  dateCreated: Date,
+  lastUpdated: Date,
+
+  sha256Hex: String,
+  name: String,
+  extension: String,
+  contentType: String,
+  originalFilename: String,
+  size: Number,
+
+  quality: {type: String, enum:['360p', '480p', '720p', '1080p']}
+
+
+});
+
+// TODO: getImagePath() getSrc()
+
+module.exports = mongoose.model("File", FileSchema);

@@ -34,9 +34,13 @@ var TvShowSchema = mongoose.Schema({
   vote_count: Number,
   popularity: Number,
 
-  episodes:[{}]
+  episodes:[{type: Schema.ObjectId, ref: 'EpisodeSchema'}]
 
 });
+
+TvShowSchema.statics.findAllNotDeleted = function(callback) {
+  this.find({deleted: false}, callback);
+};
 
 TvShowSchema.methods.getExternalLinks = function(callback) {
   settingsService.getTMDbAPIkey(function(err, key) {
@@ -47,7 +51,6 @@ TvShowSchema.methods.getExternalLinks = function(callback) {
       callback(err);
     }
   });
-
 };
 
 

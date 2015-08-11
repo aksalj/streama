@@ -43,6 +43,7 @@
     "file-stream-rotator": "0.0.6",
     "fs-extra": "^0.23.1",
     "mongoose": "4.1.1",
+    "mongoose-schema-extend": "^0.1.7",
     "morgan": "^1.6.1",
     "nodemailer": "^1.4.0",
     "nodemailer-direct-transport": "^1.0.2",

@@ -11,3 +11,29 @@
  *
  */
 'use strict';
+var mongoose = require('mongoose');
+var VideoSchema = require("./Video").schema;
+
+String.prototype.padLeft = function(l,c) {
+  return new Array(l-this.length+1).join(c||" ")+this;
+};
+
+var EpisodeSchema = VideoSchema.extend({
+  name: String,
+  air_date: String,
+  season_number: Number,
+  episode_number: Number,
+  episodeString: String,
+
+  still_path: String,
+
+  show: {type: Schema.ObjectId, ref: "TvShowSchema"}
+
+});
+
+EpisodeSchema.pre('update', function() {
+  this.episodeString = "s" + this.season_number.toString().padLeft(2, '0');
+  this.episodeString += +"e" + this.episode_number.toString().padLeft(2, '0');
+});
+
+module.exports = mongoose.model("Episode", EpisodeSchema);

@@ -32,7 +32,7 @@ var UserSchema = mongoose.Schema({
   uuid: String,
   fullName: String,
 
-  favoriteGenres:[{}],
+  favoriteGenres:[{type: Schema.ObjectId, ref: 'GenreSchema'}],
 
   roles:[String]
 

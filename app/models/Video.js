@@ -11,3 +11,24 @@
  *
  */
 'use strict';
+var mongoose = require('mongoose');
+
+var VideoSchema = mongoose.Schema({
+  dateCreated: {type: Date, required: false},
+  lastUpdated: {type: Date, required: false},
+
+  overview: String,
+  apiId: String,
+  original_language: String,
+
+  vote_average: Number,
+  vote_count: Number,
+  popularity: Number,
+
+  imdb_id: String,
+
+  files: [{type: Schema.ObjectId, ref: "FileSchema"}]
+
+}, {discriminatorKey : '_type' });
+
+module.exports = mongoose.model("Video", VideoSchema);

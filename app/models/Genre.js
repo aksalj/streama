@@ -11,3 +11,12 @@
  *
  */
 'use strict';
+var mongoose = require('mongoose');
+
+var GenreSchema = mongoose.Schema({
+  name: {type: String, required: true},
+  apiId: {type: String, required: true}
+});
+
+
+module.exports = mongoose.model("Genre", GenreSchema);
