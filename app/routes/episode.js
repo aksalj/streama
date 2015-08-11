@@ -13,11 +13,16 @@
 'use strict';
 var express = require('express');
 
+var EpisodeModel = require("../models").Episode;
+var marshal = require("../services/streama/marshaller");
 var router = express.Router();
 
 
 router.get('/', function(req, res) {
-  res.sendStatus(500);
+  var id = req.query.showId;
+  EpisodeModel.findAllByShow(id,function(err, episodes) {
+    marshal.sendJson(res, episodes);
+  });
 });
 
 module.exports = router;

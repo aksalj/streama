@@ -37,4 +37,9 @@ EpisodeSchema.pre('update', function() {
   this.episodeString += +"e" + this.episode_number.toString().padLeft(2, '0');
 });
 
+
+EpisodeSchema.statics.findAllByShow = function(showId, callback) {
+  this.find({show: showId}, callback);
+};
+
 module.exports = mongoose.model("Episode", EpisodeSchema);

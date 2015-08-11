@@ -17,6 +17,9 @@ var TMDb = require("../services/theMovieDb");
 var marshal = require("../services/streama/marshaller");
 var settingsService = require("../services/streama/settings");
 
+var EpisodeModel = require("../models").Episode;
+var TvShowModel = require("../models").TvShow;
+
 var router = express.Router();
 
 // FIXME: Use config key by default. Use key from DB if available
@@ -47,6 +50,8 @@ router.get('/seasonForShow.json', function (req, res) {
     if(err) {
       console.error(err);
     }
+
+    // FIXME: Could we have episode duplicates??
 
     if(episodes) {
       var addEpisode = function(episode) {
