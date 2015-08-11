@@ -17,7 +17,6 @@ var uuid = require('uuid');
 var utils = require("../utils");
 var marshal = require('../services/streama/marshaller');
 var TvShowModel = require("../models").TvShow;
-var EpisodeModel = require("../models").Episode;
 
 var router = express.Router();
 
@@ -109,10 +108,7 @@ router.post('/save.json', function (req, res) {
 router.delete('/delete.json', function (req, res) {
   var id = req.query.id;
   TvShowModel.findOneAndRemove(id, function(err) {
-    EpisodeModel.remove({show:id}, function (err) {
-      // Should the files be deleted as well?
-      res.sendStatus(200);
-    });
+    res.sendStatus(200);
   });
 
 });

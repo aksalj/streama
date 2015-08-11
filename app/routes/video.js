@@ -15,7 +15,6 @@ var express = require('express');
 var async = require("async");
 
 var TvShowModel = require("../models").TvShow;
-var ViewingStatusModel = require("../models").ViewingStatus;
 var MovieModel = require("../models").Movie;
 
 var marshal = require("../services/streama/marshaller");
@@ -34,17 +33,14 @@ router.get('/dash.json', function (req, res) {
     function(callback) {
       TvShowModel.findAllNotDeleted(callback);
     },
-    function (callback) {
-      ViewingStatusModel.findAllByUser(user, callback);
-    },
     function(callback) {
       MovieModel.find({}, callback);
     }
   ], function(err, results) {
 
     var tvShows = results[0];
-    var continueWatching = results[1];
-    var allMovies = results[2];
+    var allMovies = results[1];
+    var continueWatching = user.viewingStatus;
 
     var movies = [];
     allMovies.forEach(function (movie) {

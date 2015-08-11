@@ -17,7 +17,6 @@ var TMDb = require("../services/theMovieDb");
 var marshal = require("../services/streama/marshaller");
 var settingsService = require("../services/streama/settings");
 
-var EpisodeModel = require("../models").Episode;
 var TvShowModel = require("../models").TvShow;
 
 var router = express.Router();
@@ -72,13 +71,8 @@ router.get('/seasonForShow.json', function (req, res) {
             var epIdx = episode.season_number + ":" + episode.episode_number;
             if (episodesToExclude.indexOf(epIdx) == -1) {
               episode.show = showId;
-              EpisodeModel.create(episode, function(err, ep){
-                if(err){ console.error(err); }
-                else {
-                  show.episodes.push(ep);
-                }
-                callback(err);
-              });
+              show.episodes.push(episode);
+              callback();
             } else {
               callback();
             }

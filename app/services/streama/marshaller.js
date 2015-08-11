@@ -121,7 +121,7 @@ exports.makeFullShowJson = function (tvShow) {
     var episodesWithFiles = 0;
 
     show.episodes.forEach(function(episode) {
-      if (episode.files) {
+      if (episode.files.length != 0) {
         episodesWithFiles++;
       }
     });

@@ -13,6 +13,27 @@
 'use strict';
 var mongoose = require('mongoose');
 
+var FileSchema = mongoose.Schema({
+  dateCreated: Date,
+  lastUpdated: Date,
+
+  sha256Hex: String,
+  name: String,
+  extension: String,
+  contentType: String,
+  originalFilename: String,
+  size: Number,
+
+  quality: {type: String, enum:['360p', '480p', '720p', '1080p']}
+
+
+});
+
+// TODO: File::getImagePath() File::getSrc()
+
+var File = mongoose.model("File", FileSchema);
+
+
 var VideoSchema = mongoose.Schema({
   dateCreated: {type: Date, required: false},
   lastUpdated: {type: Date, required: false},
@@ -27,7 +48,7 @@ var VideoSchema = mongoose.Schema({
 
   imdb_id: String,
 
-  files: [{type: mongoose.Schema.ObjectId, ref: "FileSchema"}]
+  files: [FileSchema]
 
 }, {discriminatorKey : '_type' });
 

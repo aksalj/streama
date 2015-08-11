@@ -14,6 +14,27 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 
+var GenreSchema = mongoose.Schema({
+  name: {type: String, required: true},
+  apiId: {type: String, required: true}
+});
+var Genre = mongoose.model("Genre", GenreSchema);
+
+var Schema = mongoose.Schema;
+
+var ViewingStatusSchema = mongoose.Schema({
+  dateCreated: {type: Date, required: false},
+  lastUpdated: {type: Date, required: false},
+
+  video: {type: Schema.ObjectId, ref: 'VideoSchema', required: true},
+  tvShow: {type: Schema.ObjectId, ref: 'TvShowSchema'},
+
+  currentPlayTime: {type: Number, required: true},
+  runtime: Number,
+  completed: Boolean
+
+});
+var ViewingStatus = mongoose.model("ViewingStatus", ViewingStatusSchema);
 
 var UserSchema = mongoose.Schema({
   dateCreated: {type: Date, required: false},
@@ -32,7 +53,8 @@ var UserSchema = mongoose.Schema({
   uuid: String,
   fullName: String,
 
-  favoriteGenres:[{type: mongoose.Schema.ObjectId, ref: 'GenreSchema'}],
+  favoriteGenres:[GenreSchema],
+  viewingStatus:[ViewingStatusSchema],
 
   roles:[String]
 

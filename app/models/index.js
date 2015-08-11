@@ -14,17 +14,12 @@
 var conf = require("config");
 var mongoose = require('mongoose');
 
-
-exports.User = require("./User");
 exports.Role = require("./Role");
 exports.Settings = require("./Settings");
-exports.File = require("./File");
-exports.Genre = require("./Genre");
-exports.Episode = require("./Episode");
-exports.TvShow = require("./TvShow");
-exports.Movie = require("./Movie");
 exports.Video = require("./Video");
-exports.ViewingStatus = require("./ViewingStatus");
+exports.Movie = require("./Movie");
+exports.TvShow = require("./TvShow");
+exports.User = require("./User");
 
 
 exports.connect = function (callback) {

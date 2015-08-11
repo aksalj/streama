@@ -13,14 +13,18 @@
 'use strict';
 var express = require('express');
 
-var EpisodeModel = require("../models").Episode;
+var TvShowModel = require("../models").TvShow;
 var marshal = require("../services/streama/marshaller");
 var router = express.Router();
 
 
 router.get('/', function(req, res) {
   var id = req.query.showId;
-  EpisodeModel.findAllByShow(id,function(err, episodes) {
+  TvShowModel.findOne({_id: id}, function (err, show) {
+    var episodes = [];
+    if(show) {
+      episodes = show.episodes;
+    }
     marshal.sendJson(res, episodes);
   });
 });
