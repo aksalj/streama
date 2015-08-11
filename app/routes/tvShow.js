@@ -108,14 +108,11 @@ router.post('/save.json', function (req, res) {
 
 router.delete('/delete.json', function (req, res) {
   var id = req.query.id;
-  TvShowModel.find({_id: id}, function (err, show) {
-    if(show) {
-      // TODO: Delete all episodes
-
-      show.remove();
-    }
-
-    res.sendStatus(200);
+  TvShowModel.findOneAndRemove(id, function(err) {
+    EpisodeModel.remove({show:id}, function (err) {
+      // Should the files be deleted as well?
+      res.sendStatus(200);
+    });
   });
 
 });
