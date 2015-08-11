@@ -51,19 +51,52 @@ router.get('/seasonForShow.json', function (req, res) {
       console.error(err);
     }
 
-    // FIXME: Could we have episode duplicates??
-
     if(episodes) {
-      var addEpisode = function(episode) {
-        episode.show = showId;
-        EpisodeModel.create(episode, function(err){
-          if(err){console.error(err);}
-        });
-      };
-      episodes.forEach(addEpisode);
-    }
 
-    marshal.sendJson(res, episodes);
+      TvShowModel.findOne({_id: showId}, function(err, show) {
+        if(err){
+          console.error(err);
+          res.sendStatus(404);
+          return;
+        }
+
+        var episodesToExclude = [];
+        show.episodes.forEach(function(savedEpisode) {
+          episodesToExclude.push(savedEpisode.season_number + ":" + savedEpisode.episode_number);
+        });
+
+
+        var tasks = [];
+        episodes.forEach(function (episode) {
+          tasks.push(function(callback) {
+            var epIdx = episode.season_number + ":" + episode.episode_number;
+            if (episodesToExclude.indexOf(epIdx) == -1) {
+              episode.show = showId;
+              EpisodeModel.create(episode, function(err, ep){
+                if(err){ console.error(err); }
+                else {
+                  show.episodes.push(ep);
+                }
+                callback(err);
+              });
+            } else {
+              callback();
+            }
+          });
+        });
+
+        async.series(tasks, function(){
+          show.save(function(err) {
+            if(err){console.error(err);}
+            marshal.sendJson(res, show.episodes);
+          });
+        });
+
+      });
+
+    } else {
+      marshal.sendJson(res, []);
+    }
 
   });
 });
