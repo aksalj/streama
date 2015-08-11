@@ -14,7 +14,15 @@
 
 exports.UIRoutes = require("./ui");
 exports.AuthRoutes = require("./auth");
-exports.UserRoutes = require("./user");
 exports.InviteRoutes = require("./invite");
+
 exports.SettingsRoutes = require("./settings");
+exports.UserRoutes = require("./user");
 exports.TMDbRoutes = require("./theMovieDb");
+exports.TvShowRoutes = require("./tvShow");
+exports.VideoRoutes = require("./video");
+exports.FileRoutes = require("./file");
+exports.EpisodeRoutes = require("./episode");
+exports.MovieRoutes = require("./movie");
+exports.WebSocketRoutes = require("./websocket");
+exports.ViewingStatusRoutes = require("./viewingStatus");

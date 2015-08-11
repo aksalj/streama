@@ -53,6 +53,13 @@ app.use("/template", express.static('static/assets/lib/bower_components/angular-
 app.use("/user(.json)?", authService.ensureAuthenticated, routes.UserRoutes);
 app.use("/settings(.json)?", authService.ensureAuthenticated, routes.SettingsRoutes);
 app.use("/theMovieDb", authService.ensureAuthenticated, routes.TMDbRoutes);
+app.use("/video(.json)?", authService.ensureAuthenticated, routes.VideoRoutes);
+app.use("/file(.json)?", authService.ensureAuthenticated, routes.FileRoutes);
+app.use("/episode(.json)?", authService.ensureAuthenticated, routes.EpisodeRoutes);
+app.use("/movie(.json)?", authService.ensureAuthenticated, routes.MovieRoutes);
+app.use("/tvShow(.json)?", authService.ensureAuthenticated, routes.TvShowRoutes);
+app.use("/viewingStatus", authService.ensureAuthenticated, routes.ViewingStatusRoutes);
+app.use("/websocket", authService.ensureAuthenticated, routes.WebSocketRoutes);
 
 
 //    UI

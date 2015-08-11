@@ -50,7 +50,7 @@ router.get('/current.json', function (req, res) {
  * Save User
  */
 router.post('/save.json', function (req, res) {
-  res.end();
+  res.sendStatus(500);
 });
 
 
