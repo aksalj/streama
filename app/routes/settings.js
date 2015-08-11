@@ -12,6 +12,7 @@
  */
 'use strict';
 var express = require('express');
+var async = require("async");
 var SettingsModel = require('./../models/Settings');
 var marshal = require("./../services/streama/marshaller");
 var settingsService = require("./../services/streama/settings");
@@ -33,8 +34,25 @@ router.get('/', function (req, res) {
 });
 
 router.post('/updateMultiple.json', function (req, res) {
-  console.error(req.body);
-  res.end();
+  var data = req.body;
+  var tasks = [];
+  data.forEach(function(item) {
+    if(item.dirty && item.valid) {
+      tasks.push(function(callback){
+        SettingsModel.update({_id: item._id}, {value: item.value}, function(err) {
+          if(err){
+            console.error(err);
+          }
+          callback(err);
+        });
+      });
+    }
+  });
+
+  async.series(tasks, function() {
+    res.end();
+  });
+
 });
 
 router.post('/validateSettings.json', function (req, res) {
