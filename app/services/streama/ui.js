@@ -76,9 +76,11 @@ var scripts = [
   assets.js + "controllers/modal-video-ctrl.js",
 
   assets.js + "directives/admin-episode-directive.js",
+  assets.js + "directives/streama-video-player-directive.js",
 
   assets.js + "services/api-service.js",
   assets.js + "services/filters.js",
+  assets.js + "services/player-service.js",
   assets.js + "services/modal-service.js",
   assets.js + "services/socket-service.js",
   assets.js + "services/upload-service.js"
