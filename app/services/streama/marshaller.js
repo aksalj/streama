@@ -135,12 +135,50 @@ exports.sendFileJson = function (res, file) {
   sendJson(res, data);
 
 };
+
 exports.sendMovieJson = function (res, movie) {
-  sendJson(res, movie);
+
+  var mediaFiles = [];
+  var subtitleFiles = [];
+  movie.files.forEach(function (file) {
+    if(file.extension === ".srt") {
+      subtitleFiles.push(file);
+    } else {
+      mediaFiles.push(file);
+    }
+  });
+
+  movie.getSimilarMovies(function (err, similar) {
+    var data  = {
+      id: movie.id,
+      dateCreated: movie.dateCreated,
+      lastUpdated: movie.lastUpdated,
+      overview: movie.overview,
+      imdb_id: movie.imdb_id,
+      vote_average: movie.vote_average,
+      vote_count: movie.vote_count,
+      popularity: movie.popularity,
+      original_language: movie.original_language,
+      apiId: movie.apiId,
+
+      title: movie.title,
+      release_date: movie.release_date,
+      backdrop_path: movie.backdrop_path,
+      poster_path: movie.poster_path,
+
+      files: mediaFiles,
+      subtitles: subtitleFiles,
+
+      similarMovies: similar
+    };
+
+    sendJson(res, data);
+  });
+
 };
 
 exports.sendVideoJson = function (res, video) {
-  
+
 };
 
 exports.makeFullShowJson = function (tvShow) {
@@ -209,9 +247,5 @@ exports.makeFullViewingStatusJson = function (viewingStatus) {
   } else {
     return makeJSON(viewingStatus);
   }
-
-};
-
-exports.makeFullMovieJson = function(res, movie) {
 
 };
