@@ -51,7 +51,7 @@ var TMDb = function(apiKey, debug) {
         var data = JSON.parse(body);
         callback(null, data.results);
       } else {
-        callback(err);
+        callback(err || body);
       }
     });
   };

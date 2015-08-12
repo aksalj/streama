@@ -6,7 +6,7 @@ streamaApp.directive('streamaVideoPlayer', [
 
     return {
       restrict: 'AE',
-      templateUrl: 'streama-video-player.htm',
+      templateUrl: 'streama-video-player.tpl.htm',
       scope: {
         options: '='
       },

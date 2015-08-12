@@ -13,6 +13,8 @@
 'use strict';
 var mongoose = require('mongoose');
 
+var settingsService = require("../services/streama/settings");
+
 var FileSchema = mongoose.Schema({
   dateCreated: Date,
   lastUpdated: Date,
@@ -29,7 +31,17 @@ var FileSchema = mongoose.Schema({
 
 });
 
-// TODO: File::getImagePath() File::getSrc()
+
+FileSchema.methods.getPath = function (callback) {
+  var that = this;
+  settingsService.getUploadDir(function(err, dir) {
+    callback(dir + "/" + that.name);
+  });
+};
+
+FileSchema.methods.getSrc = function() {
+  return settingsService.getBaseUrl() + "file/serve/" + this.name;
+};
 
 var File = mongoose.model("File", FileSchema);
 
@@ -50,6 +62,6 @@ var VideoSchema = mongoose.Schema({
 
   files: [FileSchema]
 
-}, {discriminatorKey : '_type' });
+}, {collection : 'videos', discriminatorKey : '_type' });
 
 module.exports = mongoose.model("Video", VideoSchema);

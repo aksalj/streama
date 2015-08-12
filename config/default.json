@@ -21,11 +21,13 @@
     "keepAlive": true
   },
 
-  "apiKeys":{
-    "tmdb":null
-  },
-
   "defaultData":{
+
+    "settings": {
+      "uploadDir": "/data/streama",
+      "tmdbAPIKey": null
+    },
+
     "roles":[
       {
         "authority":"ROLE_ADMIN",

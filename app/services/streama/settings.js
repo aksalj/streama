@@ -21,9 +21,10 @@ var SettingsModel = require("../../models").Settings;
 
 var protocol = conf.get("app.secure") ? "https://" : "http://";
 var port = conf.get("app.secure") ? conf.get("app.ssl.port") : conf.get("app.port");
-var BASE_URL = protocol + conf.get("app.host") + ":" + port + "/";
 
-var TMDb_API_KEY = conf.get("apiKeys.tmdb");
+var BASE_URL = protocol + conf.get("app.host") + ":" + port + "/";
+var UPLOAD_DIR = conf.get("defaultData.settings.uploadDir");
+var TMDb_API_KEY = conf.get("defaultData.settings.tmdbAPIKey");
 
 var KEY_BASE_URL = "Base URL";
 var KEY_UPLOAD_DIRECTORY = "Upload Directory";
@@ -32,6 +33,7 @@ var KEY_TMDb_API_KEY = "TheMovieDB API key";
 var DEFAULT_SETTINGS = [
   {
     settingsKey: KEY_UPLOAD_DIRECTORY,
+    value: UPLOAD_DIR,
     description: 'This setting provides the application with your desired upload-path for all files. ' +
     'The default so far has been /data/streama. Remember: if you change this path, copy all the files ' +
     '(that were previously added) into the new directory.',
@@ -90,6 +92,19 @@ var validateTMDbAPIKey = function (apiKey, cb) {
   });
 };
 
+var getSettings = function (key, defaultValue, callback) {
+  if(typeof callback == "function") { // Read Key from DB
+    SettingsModel.findBySettingsKey(key, function(err, settings){
+      if(!err && settings && settings.value) {
+        callback(null, settings.value);
+      } else {
+        callback(err, defaultValue);
+      }
+    });
+  } else { // dir from config file
+    return defaultValue;
+  }
+};
 
 exports.getDefaultSettings = function () {
   return DEFAULT_SETTINGS;
@@ -100,17 +115,11 @@ exports.getBaseUrl = function () {
 };
 
 exports.getTMDbAPIkey = function (callback) {
-  if(typeof callback == "function") { // Read Key from DB
-    SettingsModel.findBySettingsKey(KEY_TMDb_API_KEY, function(err, settings){
-      if(!err && settings && settings.value) {
-        callback(null, settings.value);
-      } else {
-        callback(err);
-      }
-    });
-  } else { // Key from config file
-    return TMDb_API_KEY;
-  }
+  return getSettings(KEY_TMDb_API_KEY, TMDb_API_KEY, callback);
+};
+
+exports.getUploadDir = function (callback) {
+  return getSettings(KEY_UPLOAD_DIRECTORY, UPLOAD_DIR, callback);
 };
 
 

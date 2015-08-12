@@ -35,7 +35,7 @@ router.get('/search.json', function (req, res) {
   var name = req.query.name;
   tmdb.search(type, name, function(err, data) {
     var status = 200;
-    if(err){ status = 404; }
+    if(err || !data){ status = 404; }
     marshal.sendJson(res, data, status);
   });
 

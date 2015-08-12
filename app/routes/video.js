@@ -14,10 +14,15 @@
 var express = require('express');
 var async = require("async");
 
+
 var TvShowModel = require("../models").TvShow;
-var MovieModel = require("../models").Movie;
+//var MovieModel = require("../models").Movie;
+var VideoModel = require("../models").Movie;
 
 var marshal = require("../services/streama/marshaller");
+var settingsService = require("../services/streama/settings");
+var uploadService = require("../services/streama/upload");
+
 var router = express.Router();
 
 
@@ -34,7 +39,15 @@ router.get('/dash.json', function (req, res) {
       TvShowModel.findAllNotDeleted(callback);
     },
     function(callback) {
-      MovieModel.find({}, callback);
+      VideoModel.find({}, function(err, movies) {
+        var result = [];
+        movies.forEach(function(movie) {
+          movie = movie.toJSON();
+          movie.id = movie._id;
+          result.push(movie);
+        });
+        callback(null, result);
+      });
     }
   ], function(err, results) {
 
@@ -45,10 +58,14 @@ router.get('/dash.json', function (req, res) {
     var movies = [];
     allMovies.forEach(function (movie) {
       if (movie.files && movie.files.length > 0) {
-        for(var i = 0; i < continueWatching.length; i++) {
-          if (movie._id != continueWatching[i].video._id) {
-            movies.push(movie);
+        if (continueWatching.length > 0) {
+          for (var i = 0; i < continueWatching.length; i++) {
+            if (movie._id != continueWatching[i].video._id) {
+              movies.push(movie);
+            }
           }
+        } else {
+          movies.push(movie);
         }
       }
     });
@@ -104,6 +121,10 @@ router.get('/dash.json', function (req, res) {
   });
 
 
+});
+
+router.post("/uploadFile.json", uploadService.upload, function(req, res) {
+  marshal.sendJson(res, req.uploadedFile);
 });
 
 module.exports = router;

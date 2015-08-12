@@ -4,7 +4,7 @@ streamaApp.factory('modalService', ['$modal', function ($modal) {
 	return{
 		tvShowModal: function (tvShow, callback) {
 			var modalInstance = $modal.open({
-				templateUrl: 'modal--tvShow.htm',
+				templateUrl: 'modal--tvShow.tpl.htm',
 				controller: 'modalTvShowCtrl',
 				size: 'lg',
 				resolve: {
@@ -65,7 +65,7 @@ streamaApp.factory('modalService', ['$modal', function ($modal) {
 
 		openFileBrowser: function (callback) {
 			var modalInstance = $modal.open({
-				templateUrl: 'modal--file-browser.htm',
+				templateUrl: 'modal--file-browser.tpl.htm',
 				controller: 'modalFileBrowserCtrl',
 				size: 'lg'
 			});
@@ -78,7 +78,7 @@ streamaApp.factory('modalService', ['$modal', function ($modal) {
 
 		userModal: function (user, callback) {
 			var modalInstance = $modal.open({
-				templateUrl: 'modal--user.htm',
+				templateUrl: 'modal--user.tpl.htm',
 				controller: 'modalUserCtrl',
 				size: 'lg',
 				resolve: {
