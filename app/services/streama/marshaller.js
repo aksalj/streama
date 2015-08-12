@@ -58,13 +58,36 @@ var sendJson = function (res, data, status) {
   }
 
   try{ // Do not confuse the ids (_id vs id) used by frontend
-    data = data.toJSON();
-    if (data._id && !data.id) {
-      data.id = data._id;
+
+    var convertIds = function (modelObj) {
+      try {
+        json = modelObj.toJSON();
+        if (json._id && !json.id) {
+          json.id = json._id;
+        }
+        return json;
+      } catch(e){
+       //console.warn(e);
+      }
+      return null;
+    };
+
+    if(data instanceof Array) { // typeof Array
+      var jsons = [];
+      data.forEach(function(modelObj) {
+        var json = convertIds(modelObj);
+        if(json) { jsons.push(json); }
+      });
+      if (jsons.length > 0) {
+        data = jsons;
+      }
+    } else {
+      var json = convertIds(data);
+      if(json !== null) {
+        data = json;
+      }
     }
-  }catch(e){
-    //console.warn(e);
-  }
+  } catch(e){ }
 
   res.status(status).json(data);
 };
@@ -112,8 +135,13 @@ exports.sendFileJson = function (res, file) {
   sendJson(res, data);
 
 };
-exports.sendMovieJson = function (res, movie) {};
-exports.sendVideoJson = function (res, video) {};
+exports.sendMovieJson = function (res, movie) {
+  sendJson(res, movie);
+};
+
+exports.sendVideoJson = function (res, video) {
+  
+};
 
 exports.makeFullShowJson = function (tvShow) {
 
@@ -184,4 +212,6 @@ exports.makeFullViewingStatusJson = function (viewingStatus) {
 
 };
 
-exports.sendFullMovieJson = function(res, movie) {};
+exports.makeFullMovieJson = function(res, movie) {
+
+};
