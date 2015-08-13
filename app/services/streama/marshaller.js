@@ -12,14 +12,15 @@
  */
 'use strict';
 var conf = require("config");
+var async = require("async");
 var settingsService = require("./settings");
 
 var defaultRoles = conf.get("defaultData.roles");
 
-var _getAuthoritiesForUser = function(user) {
+var _getAuthoritiesForUser = function (user) {
   var auths = [];
   user.roles.forEach(function (userRole) {
-    defaultRoles.forEach(function(role) {
+    defaultRoles.forEach(function (role) {
       if (role.authority === userRole) {
         auths.push(role);
       }
@@ -40,7 +41,7 @@ var _makePublicUser = function (user) {
     invitationSent: user.invitationSent,
     favoriteGenres: user.favoriteGenres,
     isAdmin: user.roles.indexOf('ROLE_ADMIN') != -1,
-    isContentManager:  user.roles.indexOf('ROLE_CONTENT_MANAGER') != -1
+    isContentManager: user.roles.indexOf('ROLE_CONTENT_MANAGER') != -1
   };
 
   if (user.invitationSent && user.uuid) {
@@ -51,13 +52,13 @@ var _makePublicUser = function (user) {
 };
 
 var sendJson = function (res, data, status) {
-  if(!status){
+  if (!status) {
     status = 200;
   } else if (typeof status !== "number") {
     status = 500;
   }
 
-  try{ // Do not confuse the ids (_id vs id) used by frontend
+  try { // Do not confuse the ids (_id vs id) used by frontend
 
     var convertIds = function (modelObj) {
       try {
@@ -66,28 +67,31 @@ var sendJson = function (res, data, status) {
           json.id = json._id;
         }
         return json;
-      } catch(e){
-       //console.warn(e);
+      } catch (e) {
+        //console.warn(e);
       }
       return null;
     };
 
-    if(data instanceof Array) { // typeof Array
+    if (data instanceof Array) { // typeof Array
       var jsons = [];
-      data.forEach(function(modelObj) {
+      data.forEach(function (modelObj) {
         var json = convertIds(modelObj);
-        if(json) { jsons.push(json); }
+        if (json) {
+          jsons.push(json);
+        }
       });
       if (jsons.length > 0) {
         data = jsons;
       }
     } else {
       var json = convertIds(data);
-      if(json !== null) {
+      if (json !== null) {
         data = json;
       }
     }
-  } catch(e){ }
+  } catch (e) {
+  }
 
   res.status(status).json(data);
 };
@@ -100,15 +104,15 @@ exports.sendUserJson = function (res, user) {
 
 exports.sendUsersJson = function (res, users) {
   var data = [];
-  users.forEach(function(user) {
+  users.forEach(function (user) {
     data.push(_makePublicUser(user));
   });
   sendJson(res, data);
 };
 
-exports.sendRolesJson = function(res, roles) {
+exports.sendRolesJson = function (res, roles) {
   var data = [];
-  roles.forEach(function(role){
+  roles.forEach(function (role) {
     data.push({
       authority: role.authority,
       displayName: role.displayName
@@ -123,7 +127,7 @@ exports.sendFileJson = function (res, file) {
     id: file._id,
     name: file.name,
     sha256Hex: file.sha256Hex,
-    src: file.src,
+    src: file.getSrc(),
     originalFilename: file.originalFilename,
     extension: file.extension,
     contentType: file.contentType,
@@ -136,48 +140,90 @@ exports.sendFileJson = function (res, file) {
 
 };
 
-exports.sendMovieJson = function (res, movie) {
+exports.sendVideoJson = function (res, videos) {
 
-  var mediaFiles = [];
-  var subtitleFiles = [];
-  movie.files.forEach(function (file) {
-    if(file.extension === ".srt") {
-      subtitleFiles.push(file);
-    } else {
-      mediaFiles.push(file);
-    }
-  });
+  var prepData = function (video, callback) {
 
-  movie.getSimilarMovies(function (err, similar) {
-    var data  = {
-      id: movie.id,
-      dateCreated: movie.dateCreated,
-      lastUpdated: movie.lastUpdated,
-      overview: movie.overview,
-      imdb_id: movie.imdb_id,
-      vote_average: movie.vote_average,
-      vote_count: movie.vote_count,
-      popularity: movie.popularity,
-      original_language: movie.original_language,
-      apiId: movie.apiId,
+    var tasks = [];
 
-      title: movie.title,
-      release_date: movie.release_date,
-      backdrop_path: movie.backdrop_path,
-      poster_path: movie.poster_path,
+    var mediaFiles = [];
+    var subtitleFiles = [];
+    video.files.forEach(function (file) {
+      if (file.extension === ".srt") {
+        subtitleFiles.push(file);
+      } else {
+        mediaFiles.push(file);
+      }
+    });
+
+    var data = {
+      id: video.id,
+      dateCreated: video.dateCreated,
+      lastUpdated: video.lastUpdated,
+      overview: video.overview,
+      imdb_id: video.imdb_id,
+      vote_average: video.vote_average,
+      vote_count: video.vote_count,
+      popularity: video.popularity,
+      original_language: video.original_language,
+      apiId: video.apiId,
 
       files: mediaFiles,
-      subtitles: subtitleFiles,
-
-      similarMovies: similar
+      subtitles: subtitleFiles
     };
 
-    sendJson(res, data);
-  });
+    if (video._type === "Movie") {
 
-};
+      data.title = video.title;
+      data.release_date = video.release_date;
+      data.backdrop_path = video.backdrop_path;
+      data.poster_path = video.poster_path;
 
-exports.sendVideoJson = function (res, video) {
+      tasks.push(function(cb) {
+        video.getSimilarMovies(function (err, similar) {
+          data.similarMovies = similar;
+          cb(null);
+        });
+      });
+
+    } else if (video._type === "Episode") {
+
+      data.show = video.show;
+      data.episodeString = video.episodeString;
+      data.name = video.name;
+      data.air_date = video.air_date;
+      data.season_number = video.season_number;
+      data.episode_number = video.episode_number;
+      data.still_path = video.still_path;
+
+      // TODO: Next Episode
+    }
+
+    async.series(tasks, function(err, result) {
+      callback(data);
+    });
+
+  };
+
+  if( videos instanceof Array) {
+    var tasks = [];
+    videos.forEach(function (video) {
+      tasks.push(function(callback) {
+        prepData(video, function (data) {
+          callback(null, data);
+        });
+      });
+    });
+
+    async.series(tasks, function (err, results) {
+      sendJson(res, results);
+    });
+
+  } else {
+    prepData(videos, function(data) {
+      sendJson(res, data);
+    });
+  }
 
 };
 
@@ -186,13 +232,13 @@ exports.makeFullShowJson = function (tvShow) {
   var makeJSON = function (show) {
     var episodesWithFiles = 0;
 
-    show.episodes.forEach(function(episode) {
+    show.episodes.forEach(function (episode) {
       if (episode.files.length != 0) {
         episodesWithFiles++;
       }
     });
 
-    return  {
+    return {
       id: show.id,
       dateCreated: show.dateCreated,
       lastUpdated: show.lastUpdated,
@@ -211,9 +257,9 @@ exports.makeFullShowJson = function (tvShow) {
     };
   };
 
-  if(tvShow instanceof Array) {
+  if (tvShow instanceof Array) {
     var data = [];
-    tvShow.forEach(function(show) {
+    tvShow.forEach(function (show) {
       data.push(makeJSON(show));
     });
     return data;
@@ -226,7 +272,7 @@ exports.makeFullShowJson = function (tvShow) {
 exports.makeFullViewingStatusJson = function (viewingStatus) {
 
   var makeJSON = function (status) {
-    return  {
+    return {
       id: status.id,
       dateCreated: status.dateCreated,
       lastUpdated: status.lastUpdated,
@@ -238,9 +284,9 @@ exports.makeFullViewingStatusJson = function (viewingStatus) {
     };
   };
 
-  if(viewingStatus instanceof Array) {
+  if (viewingStatus instanceof Array) {
     var data = [];
-    viewingStatus.forEach(function(status) {
+    viewingStatus.forEach(function (status) {
       data.push(makeJSON(status));
     });
     return data;

@@ -35,7 +35,7 @@ router.get("/show.json", function(req, res) {
       console.error(err);
       res.sendStatus(404);
     } else {
-      marshal.sendMovieJson(res, movie);
+      marshal.sendVideoJson(res, movie);
     }
   })
 });
@@ -67,9 +67,14 @@ router.post("/save.json", function(req, res) {
       // TODO: Find imdb id
       if (!movie.imdb_id) {
         movie.getFullMovieMeta(function (err, data) {
+          if(err) {
+            console.error(err);
+          }
+
           if (data) {
             movie.imdb_id = data.imdb_id;
-          }
+          } else { console.warn("Could not get IMDB id!"); }
+          
           saveAndRespond();
         });
       } else {
@@ -93,6 +98,13 @@ router.post("/save.json", function(req, res) {
 
   });
 
+});
+
+router.delete("/delete.json", function(req, res) {
+  var id = req.query.id;
+  MovieModel.findOneAndRemove({_id: id}, function (err) {
+    res.end();
+  });
 });
 
 module.exports = router;

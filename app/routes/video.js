@@ -27,6 +27,13 @@ var router = express.Router();
 
 
 router.get('/', function(req, res) {
+  VideoModel.find({}, function(err, videos) {
+    if(err){
+      console.error(err);
+      videos = [];
+    }
+    marshal.sendVideoJson(res, videos);
+  });
   res.sendStatus(500);
 });
 
@@ -123,8 +130,22 @@ router.get('/dash.json', function (req, res) {
 
 });
 
+router.get('/show.json', function (req, res) {
+  var videoId = req.query.id;
+  VideoModel.find({_id: videoId}, function (err, video) {
+    if(err) { console.error(err); }
+
+    if (video) {
+      marshal.sendVideoJson(res, video);
+    } else {
+      res.sendStatus(404);
+    }
+  });
+});
+
+
 router.post("/uploadFile.json", uploadService.upload, function(req, res) {
-  marshal.sendJson(res, req.uploadedFile);
+  marshal.sendFileJson(res, req.uploadedFile);
 });
 
 module.exports = router;
