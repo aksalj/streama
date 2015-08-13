@@ -149,6 +149,9 @@ exports.sendVideoJson = function (res, videos) {
     var mediaFiles = [];
     var subtitleFiles = [];
     video.files.forEach(function (file) {
+      var src = file.getSrc();
+      file = file.toJSON();
+      file.src = src;
       if (file.extension === ".srt") {
         subtitleFiles.push(file);
       } else {

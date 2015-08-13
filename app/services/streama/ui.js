@@ -14,7 +14,7 @@
 var settingsService = require("./settings");
 
 
-var paths = { root: settingsService.getBaseUrl() };
+var paths = { base: "/", root: settingsService.getBaseUrl() };
 paths.login = paths.root + "auth/login";
 paths.logout = paths.root + "auth/logout";
 

@@ -16,7 +16,8 @@ var express = require('express');
 var router = express.Router();
 
 
-router.get('/', function(req, res) {
+router.get('/triggerPlayerAction.json', function(req, res) {
+  console.error(req.params);
   res.sendStatus(500);
 });
 

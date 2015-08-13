@@ -132,7 +132,7 @@ router.get('/dash.json', function (req, res) {
 
 router.get('/show.json', function (req, res) {
   var videoId = req.query.id;
-  VideoModel.find({_id: videoId}, function (err, video) {
+  VideoModel.findOne({_id: videoId}, function (err, video) {
     if(err) { console.error(err); }
 
     if (video) {
