@@ -46,12 +46,12 @@ router.get('/dash.json', function (req, res) {
       TvShowModel.findAllNotDeleted(callback);
     },
     function(callback) {
-      VideoModel.find({}, function(err, movies) {
+      VideoModel.find({}, function(err, videos) {
         var result = [];
-        movies.forEach(function(movie) {
-          movie = movie.toJSON();
-          movie.id = movie._id;
-          result.push(movie);
+        videos.forEach(function(video) {
+          video = video.toJSON();
+          video.id = video._id;
+          result.push(video);
         });
         callback(null, result);
       });
@@ -59,20 +59,20 @@ router.get('/dash.json', function (req, res) {
   ], function(err, results) {
 
     var tvShows = results[0];
-    var allMovies = results[1];
+    var videos = results[1];
     var continueWatching = user.viewingStatus;
 
     var movies = [];
-    allMovies.forEach(function (movie) {
-      if (movie.files && movie.files.length > 0) {
+    videos.forEach(function (video) {
+      if (video.files && video.files.length > 0) {
         if (continueWatching.length > 0) {
           for (var i = 0; i < continueWatching.length; i++) {
-            if (movie._id != continueWatching[i].video._id) {
-              movies.push(movie);
+            if (video._id != continueWatching[i].video._id) {
+              movies.push(video);
             }
           }
         } else {
-          movies.push(movie);
+          movies.push(video);
         }
       }
     });
@@ -83,7 +83,7 @@ router.get('/dash.json', function (req, res) {
       var i = 0;
       for(i; i < continueWatching.length; i++) {
         var viewSt = continueWatching[i];
-        if (viewSt.video._type == 'episode' && viewSt.video.show._id == tvShow._id) {
+        if (viewSt.video._type == 'Episode' && viewSt.video.show._id == tvShow._id) {
           return;
         }
       }
@@ -112,6 +112,7 @@ router.get('/dash.json', function (req, res) {
       if(firstEpisode && firstEpisode.files.length != 0) {
         firstEpisode = firstEpisode.toJSON();
         firstEpisode.id = firstEpisode._id;
+        firstEpisode.show = tvShow.toJSON();
         firstEpisodes.push(firstEpisode);
       }
 

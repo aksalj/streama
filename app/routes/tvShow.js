@@ -24,8 +24,8 @@ var router = express.Router();
  * List tv shows
  */
 router.get('/', function (req, res) {
-  TvShowModel.findAllNotDeleted(function(err, shows) {
-    if(err) {
+  TvShowModel.findAllNotDeleted(function (err, shows) {
+    if (err) {
       console.error(err);
     }
     var data = [];
@@ -39,14 +39,17 @@ router.get('/', function (req, res) {
 
 router.get('/show.json', function (req, res) {
   var id = req.query.id;
-  TvShowModel.findOne({_id:id}, function (err, show) {
-    if (err){
-      console.error(err);
-      res.sendStatus(500);
-    } else {
-      marshal.sendJson(res, marshal.makeFullShowJson(show));
-    }
-  });
+  TvShowModel
+    .findOne({_id: id})
+    .populate("episodes")
+    .exec(function (err, show) {
+      if (err) {
+        console.error(err);
+        res.sendStatus(500);
+      } else {
+        marshal.sendJson(res, marshal.makeFullShowJson(show));
+      }
+    });
 });
 
 router.post('/save.json', function (req, res) {
@@ -55,12 +58,12 @@ router.post('/save.json', function (req, res) {
   // Find or create
   var id = showData._id || null;
   TvShowModel.findOne({_id: id}, function (err, found) {
-    if(err) {
+    if (err) {
       console.error(err);
     }
 
     var cb = function (show) {
-      for(var k in showData) {
+      for (var k in showData) {
         show[k] = showData[k];
       }
 
@@ -74,9 +77,9 @@ router.post('/save.json', function (req, res) {
       };
 
       // TODO: Find imdb id
-      if(!show.imdb_id) {
-        show.getExternalLinks(function(err, data) {
-          if(data) {
+      if (!show.imdb_id) {
+        show.getExternalLinks(function (err, data) {
+          if (data) {
             show.imdb_id = data.imdb_id;
           }
           saveAndRespond();
@@ -87,9 +90,9 @@ router.post('/save.json', function (req, res) {
 
     };
 
-    if (!found){
+    if (!found) {
       TvShowModel.create(showData, function (err, show) {
-        if(err) {
+        if (err) {
           console.error(err);
         } else if (show) {
           return cb(show);
@@ -102,19 +105,35 @@ router.post('/save.json', function (req, res) {
   });
 
 
-
 });
 
 router.delete('/delete.json', function (req, res) {
   var id = req.query.id;
-  TvShowModel.findOneAndRemove(id, function(err) {
+  TvShowModel.findOneAndRemove(id, function (err) {
     res.sendStatus(200);
   });
 
 });
 
 router.get('/episodesForTvShow.json', function (req, res) {
-  res.sendStatus(500);
+  // FIXME:
+  var id = req.query.id;
+  TvShowModel
+    .findOne({_id: id})
+    .populate("episodes")
+    .exec(function (err, show) {
+      if (err) {
+        console.error(err);
+        res.sendStatus(500);
+      } else {
+        var episodes = [];
+        show.episodes.forEach(function (ep) {
+          ep.show = show.toJSON();
+          episodes.push(ep);
+        });
+        marshal.sendJson(res, episodes);
+      }
+    });
 });
 
 module.exports = router;

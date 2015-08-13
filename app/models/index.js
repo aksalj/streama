@@ -18,6 +18,7 @@ exports.Role = require("./Role");
 exports.Settings = require("./Settings");
 exports.Video = require("./Video");
 exports.Movie = require("./Movie");
+exports.Episode = require("./Episode");
 exports.TvShow = require("./TvShow");
 exports.User = require("./User");
 

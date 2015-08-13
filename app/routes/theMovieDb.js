@@ -18,6 +18,7 @@ var marshal = require("../services/streama/marshaller");
 var settingsService = require("../services/streama/settings");
 
 var TvShowModel = require("../models").TvShow;
+var EpisodeModel = require("../models").Episode;
 
 var router = express.Router();
 
@@ -52,7 +53,10 @@ router.get('/seasonForShow.json', function (req, res) {
 
     if(episodes) {
 
-      TvShowModel.findOne({_id: showId}, function(err, show) {
+      TvShowModel
+        .findOne({_id: showId})
+        .populate("episodes")
+        .exec(function(err, show) {
         if(err){
           console.error(err);
           res.sendStatus(404);
@@ -71,8 +75,16 @@ router.get('/seasonForShow.json', function (req, res) {
             var epIdx = episode.season_number + ":" + episode.episode_number;
             if (episodesToExclude.indexOf(epIdx) == -1) {
               episode.show = showId;
-              show.episodes.push(episode);
-              callback();
+              var ep = new EpisodeModel(episode);
+              ep.save(function(err, savedEp) {
+                if(err) { console.error(err); }
+                console.error(savedEp);
+                show.episodes.push(savedEp._id);
+                show.save(function(err) {
+                  callback();
+                });
+              });
+
             } else {
               callback();
             }

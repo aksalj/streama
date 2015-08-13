@@ -18,15 +18,23 @@ var marshal = require("../services/streama/marshaller");
 var router = express.Router();
 
 
-router.get('/', function(req, res) {
-  var id = req.query.showId;
-  TvShowModel.findOne({_id: id}, function (err, show) {
-    var episodes = [];
-    if(show) {
-      episodes = show.episodes;
-    }
-    marshal.sendJson(res, episodes);
-  });
+router.get('/', function (req, res) {
+  res.sendStatus(500);
+
+  //var id = req.query.showId;
+  //TvShowModel
+  //  .findOne({_id: id})
+  //  .populate("episodes")
+  //  .exec(function (err, show) {
+  //    var episodes = [];
+  //    if (show) {
+  //      show.episodes.forEach(function (ep) {
+  //        ep.show = show.toJSON();
+  //        episodes.push(ep);
+  //      });
+  //    }
+  //    marshal.sendJson(res, episodes);
+  //  });
 });
 
 module.exports = router;

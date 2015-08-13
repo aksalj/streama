@@ -13,35 +13,7 @@
 'use strict';
 var mongoose = require('mongoose');
 var TMDb = require('../services/theMovieDb');
-var extend = require('mongoose-schema-extend');
-
-var VideoSchema = require("./Video").schema;
 var settingsService = require("../services/streama/settings");
-
-String.prototype.padLeft = function(l,c) {
-  return new Array(l-this.length+1).join(c||" ")+this;
-};
-
-var EpisodeSchema = VideoSchema.extend({
-  name: String,
-  air_date: String,
-  season_number: Number,
-  episode_number: Number,
-  episodeString: String,
-
-  still_path: String,
-
-  show: {type: mongoose.Schema.ObjectId, ref: "TvShowSchema"}
-
-});
-
-EpisodeSchema.pre('update', function() {
-  this.episodeString = "s" + this.season_number.toString().padLeft(2, '0');
-  this.episodeString += +"e" + this.episode_number.toString().padLeft(2, '0');
-});
-
-
-var Episode = mongoose.model("Episode", EpisodeSchema);
 
 var TvShowSchema = mongoose.Schema({
   dateCreated: {type: Date, required: false},
@@ -62,12 +34,12 @@ var TvShowSchema = mongoose.Schema({
   vote_count: Number,
   popularity: Number,
 
-  episodes:[EpisodeSchema]
+  episodes:[{type: mongoose.Schema.ObjectId, ref: "Episode"}]
 
 });
 
 TvShowSchema.statics.findAllNotDeleted = function(callback) {
-  this.find({deleted: false}, callback);
+  this.find({deleted: false}).populate("episodes").exec(callback);
 };
 
 TvShowSchema.methods.getExternalLinks = function(callback) {
