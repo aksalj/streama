@@ -191,7 +191,13 @@ exports.sendVideoJson = function (res, videos) {
 
     } else if (video._type === "Episode") {
 
-      data.show = video.show;
+      try{
+        data.show = video.show.toJSON();
+        data.show.id = data.show._id;
+      } catch(e){
+        // FIXME: show.id is needed by the frontend.
+        data.show = video.show;
+      }
       data.episodeString = video.episodeString;
       data.name = video.name;
       data.air_date = video.air_date;

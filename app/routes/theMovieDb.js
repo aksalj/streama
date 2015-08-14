@@ -84,7 +84,6 @@ router.get('/seasonForShow.json', function (req, res) {
                   if (err) {
                     console.error(err);
                   }
-                  console.error(savedEp);
                   show.episodes.push(savedEp._id);
                   show.save(function (err) {
                     episode.id = savedEp._id;

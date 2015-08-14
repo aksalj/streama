@@ -114,6 +114,7 @@ router.delete('/delete.json', function (req, res) {
     // Delete Episodes as well
     if(!err) {
       EpisodeModel.remove({show: id}, function (err) {
+        // TODO: Remove files as well?
         if(err){ console.warn(err); }
         res.sendStatus(200);
       });
@@ -125,9 +126,7 @@ router.delete('/delete.json', function (req, res) {
 });
 
 router.get('/episodesForTvShow.json', function (req, res) {
-  // FIXME: Send show id as a query
-  res.sendStatus(500);
-  /*var id = req.query.id;
+  var id = req.query.id || null;
   TvShowModel
     .findOne({_id: id})
     .populate("episodes")
@@ -137,13 +136,15 @@ router.get('/episodesForTvShow.json', function (req, res) {
         res.sendStatus(500);
       } else {
         var episodes = [];
-        show.episodes.forEach(function (ep) {
-          ep.show = show.toJSON();
-          episodes.push(ep);
-        });
+        if(show) {
+          show.episodes.forEach(function (ep) {
+            ep.show = show.toJSON();
+            episodes.push(ep);
+          });
+        }
         marshal.sendJson(res, episodes);
       }
-    });*/
+    });
 });
 
 module.exports = router;

@@ -103,6 +103,7 @@ router.post("/save.json", function(req, res) {
 router.delete("/delete.json", function(req, res) {
   var id = req.query.id;
   MovieModel.findOneAndRemove({_id: id}, function (err) {
+    // TODO: Remove files as well?
     res.end();
   });
 });
