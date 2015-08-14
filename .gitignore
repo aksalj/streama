@@ -5,6 +5,10 @@
 # IDEA
 /.idea/
 
+# Asset Bundles
+manifest.json
+static/public/
+
 # Nodejs & Bower
 *.log
 node_modules/
