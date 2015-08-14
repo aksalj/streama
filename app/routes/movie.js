@@ -14,12 +14,13 @@
 var express = require('express');
 var marshal = require('../services/streama/marshaller');
 var MovieModel = require("../models").Movie;
+var VideoModel = require("../models").Video;
 
 var router = express.Router();
 
 
 router.get('/', function(req, res) {
-  MovieModel.find({}, function(err, movies) {
+  VideoModel.find({_type: "Movie"}, function(err, movies) {
     if(err) {
       console.error(err);
       movies = [];
