@@ -24,7 +24,7 @@ var router = express.Router();
 
 // FIXME: Use config key by default. Use key from DB if available
 var tmdb = new TMDb(settingsService.getTMDbAPIkey());
-settingsService.getTMDbAPIkey(function(err, settings) {
+settingsService.getTMDbAPIkey(function (err, settings) {
   if (!err && settings && settings.value) {
     tmdb = new TMDb(settings.value);
   }
@@ -34,9 +34,11 @@ settingsService.getTMDbAPIkey(function(err, settings) {
 router.get('/search.json', function (req, res) {
   var type = req.query.type;
   var name = req.query.name;
-  tmdb.search(type, name, function(err, data) {
+  tmdb.search(type, name, function (err, data) {
     var status = 200;
-    if(err || !data){ status = 404; }
+    if (err || !data) {
+      status = 404;
+    }
     marshal.sendJson(res, data, status);
   });
 
@@ -46,59 +48,67 @@ router.get('/seasonForShow.json', function (req, res) {
   var apiId = req.query.apiId;
   var season = req.query.season;
   var showId = req.query.showId;
-  tmdb.getFullShowSeason(apiId, season, function(err, episodes) {
-    if(err) {
+  tmdb.getFullShowSeason(apiId, season, function (err, episodes) {
+    if (err) {
       console.error(err);
     }
 
-    if(episodes) {
+    if (episodes) {
 
       TvShowModel
         .findOne({_id: showId})
         .populate("episodes")
-        .exec(function(err, show) {
-        if(err){
-          console.error(err);
-          res.sendStatus(404);
-          return;
-        }
-
-        var episodesToExclude = [];
-        show.episodes.forEach(function(savedEpisode) {
-          episodesToExclude.push(savedEpisode.season_number + ":" + savedEpisode.episode_number);
-        });
+        .exec(function (err, show) {
+          if (err) {
+            console.error(err);
+            res.sendStatus(404);
+            return;
+          }
 
 
-        var tasks = [];
-        episodes.forEach(function (episode) {
-          tasks.push(function(callback) {
-            var epIdx = episode.season_number + ":" + episode.episode_number;
-            if (episodesToExclude.indexOf(epIdx) == -1) {
-              episode.show = showId;
-              var ep = new EpisodeModel(episode);
-              ep.save(function(err, savedEp) {
-                if(err) { console.error(err); }
-                console.error(savedEp);
-                show.episodes.push(savedEp._id);
-                show.save(function(err) {
-                  callback();
+          var episodesAdded = [];
+          var episodesToExclude = [];
+          show.episodes.forEach(function (savedEpisode) {
+            episodesToExclude.push(savedEpisode.season_number + ":" + savedEpisode.episode_number);
+          });
+
+
+          var tasks = [];
+          episodes.forEach(function (episode) {
+            tasks.push(function (callback) {
+              var epIdx = episode.season_number + ":" + episode.episode_number;
+              if (episodesToExclude.indexOf(epIdx) == -1) {
+                episode.show = showId;
+                var ep = new EpisodeModel(episode);
+                ep.save(function (err, savedEp) {
+                  if (err) {
+                    console.error(err);
+                  }
+                  console.error(savedEp);
+                  show.episodes.push(savedEp._id);
+                  show.save(function (err) {
+                    episode.id = savedEp._id;
+                    episodesAdded.push(episode);
+                    callback();
+                  });
                 });
-              });
 
-            } else {
-              callback();
-            }
+              } else {
+                callback();
+              }
+            });
           });
-        });
 
-        async.series(tasks, function(){
-          show.save(function(err) {
-            if(err){console.error(err);}
-            marshal.sendJson(res, show.episodes);
+          async.series(tasks, function () {
+            show.save(function (err) {
+              if (err) {
+                console.error(err);
+              }
+              marshal.sendJson(res, episodesAdded);
+            });
           });
-        });
 
-      });
+        });
 
     } else {
       marshal.sendJson(res, []);
@@ -113,8 +123,10 @@ router.get('/availableGenres.json', function (req, res) {
     tmdb.getTvGenres
   ];
 
-  async.series(tasks, function(err, results){
-    if(err){ console.error(err); }
+  async.series(tasks, function (err, results) {
+    if (err) {
+      console.error(err);
+    }
     var allGenres = results[0].concat(results[1]); // TODO: merge results from all tasks
     marshal.sendJson(res, allGenres);
   });

@@ -19,22 +19,20 @@ var router = express.Router();
 
 
 router.get('/', function (req, res) {
-  res.sendStatus(500);
-
-  //var id = req.query.showId;
-  //TvShowModel
-  //  .findOne({_id: id})
-  //  .populate("episodes")
-  //  .exec(function (err, show) {
-  //    var episodes = [];
-  //    if (show) {
-  //      show.episodes.forEach(function (ep) {
-  //        ep.show = show.toJSON();
-  //        episodes.push(ep);
-  //      });
-  //    }
-  //    marshal.sendJson(res, episodes);
-  //  });
+  var id = req.query.showId;
+  TvShowModel
+    .findOne({_id: id})
+    .populate("episodes")
+    .exec(function (err, show) {
+      var episodes = [];
+      if (show) {
+        show.episodes.forEach(function (ep) {
+          ep.show = show.toJSON();
+          episodes.push(ep);
+        });
+      }
+      marshal.sendJson(res, episodes);
+    });
 });
 
 module.exports = router;

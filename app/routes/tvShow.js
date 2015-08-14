@@ -17,6 +17,7 @@ var uuid = require('uuid');
 var utils = require("../utils");
 var marshal = require('../services/streama/marshaller');
 var TvShowModel = require("../models").TvShow;
+var EpisodeModel = require("../models").Episode;
 
 var router = express.Router();
 
@@ -110,14 +111,23 @@ router.post('/save.json', function (req, res) {
 router.delete('/delete.json', function (req, res) {
   var id = req.query.id;
   TvShowModel.findOneAndRemove(id, function (err) {
-    res.sendStatus(200);
+    // Delete Episodes as well
+    if(!err) {
+      EpisodeModel.remove({show: id}, function (err) {
+        if(err){ console.warn(err); }
+        res.sendStatus(200);
+      });
+    } else {
+      res.sendStatus(500);
+    }
   });
 
 });
 
 router.get('/episodesForTvShow.json', function (req, res) {
-  // FIXME:
-  var id = req.query.id;
+  // FIXME: Send show id as a query
+  res.sendStatus(500);
+  /*var id = req.query.id;
   TvShowModel
     .findOne({_id: id})
     .populate("episodes")
@@ -133,7 +143,7 @@ router.get('/episodesForTvShow.json', function (req, res) {
         });
         marshal.sendJson(res, episodes);
       }
-    });
+    });*/
 });
 
 module.exports = router;

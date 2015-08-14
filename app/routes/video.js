@@ -16,8 +16,8 @@ var async = require("async");
 
 
 var TvShowModel = require("../models").TvShow;
-//var MovieModel = require("../models").Movie;
-var VideoModel = require("../models").Movie;
+var EpisodeModel = require("../models").Episode;
+var VideoModel = require("../models").Video;
 
 var marshal = require("../services/streama/marshaller");
 var settingsService = require("../services/streama/settings");
@@ -26,9 +26,9 @@ var uploadService = require("../services/streama/upload");
 var router = express.Router();
 
 
-router.get('/', function(req, res) {
-  VideoModel.find({}, function(err, videos) {
-    if(err){
+router.get('/', function (req, res) {
+  VideoModel.find({}, function (err, videos) {
+    if (err) {
       console.error(err);
       videos = [];
     }
@@ -42,13 +42,13 @@ router.get('/dash.json', function (req, res) {
   var user = req.user;
 
   async.series([
-    function(callback) {
+    function (callback) {
       TvShowModel.findAllNotDeleted(callback);
     },
-    function(callback) {
-      VideoModel.find({}, function(err, videos) {
+    function (callback) {
+      VideoModel.find({}, function (err, videos) {
         var result = [];
-        videos.forEach(function(video) {
+        videos.forEach(function (video) {
           video = video.toJSON();
           video.id = video._id;
           result.push(video);
@@ -56,7 +56,7 @@ router.get('/dash.json', function (req, res) {
         callback(null, result);
       });
     }
-  ], function(err, results) {
+  ], function (err, results) {
 
     var tvShows = results[0];
     var videos = results[1];
@@ -64,7 +64,7 @@ router.get('/dash.json', function (req, res) {
 
     var movies = [];
     videos.forEach(function (video) {
-      if (video.files && video.files.length > 0) {
+      if (video._type == "Movie" && video.files && video.files.length > 0) {
         if (continueWatching.length > 0) {
           for (var i = 0; i < continueWatching.length; i++) {
             if (video._id != continueWatching[i].video._id) {
@@ -79,9 +79,9 @@ router.get('/dash.json', function (req, res) {
 
     var firstEpisodes = [];
     //var _episodeSchema = require('mongoose').model('Episode').schema;
-    tvShows.forEach(function(tvShow) {
+    tvShows.forEach(function (tvShow) {
       var i = 0;
-      for(i; i < continueWatching.length; i++) {
+      for (i; i < continueWatching.length; i++) {
         var viewSt = continueWatching[i];
         if (viewSt.video._type == 'Episode' && viewSt.video.show._id == tvShow._id) {
           return;
@@ -90,16 +90,16 @@ router.get('/dash.json', function (req, res) {
 
       // Find first episode in tvShow??
       var firstEpisode = null;
-      for(i = 0; i < tvShow.episodes.length; i++) {
+      for (i = 0; i < tvShow.episodes.length; i++) {
         var ep = tvShow.episodes[i];
-        if(ep.files && ep.season_number != "0") {
+        if (ep.files && ep.season_number != "0") {
           firstEpisode = ep;
           break;
         }
       }
-      if(firstEpisode) {
-        tvShow.episodes.forEach(function(ep) {
-          if(ep.season_number == firstEpisode.season_number &&
+      if (firstEpisode) {
+        tvShow.episodes.forEach(function (ep) {
+          if (ep.season_number == firstEpisode.season_number &&
             ep.episode_number < firstEpisode.episode_number && ep.files.length != 0) {
             firstEpisode = ep;
           } else if (ep.season_number < firstEpisode.season_number && ep.files.length != 0 &&
@@ -109,7 +109,7 @@ router.get('/dash.json', function (req, res) {
         });
       }
 
-      if(firstEpisode && firstEpisode.files.length != 0) {
+      if (firstEpisode && firstEpisode.files.length != 0) {
         firstEpisode = firstEpisode.toJSON();
         firstEpisode.id = firstEpisode._id;
         firstEpisode.show = tvShow.toJSON();
@@ -133,19 +133,22 @@ router.get('/dash.json', function (req, res) {
 
 router.get('/show.json', function (req, res) {
   var videoId = req.query.id;
-  VideoModel.findOne({_id: videoId}, function (err, video) {
-    if(err) { console.error(err); }
+  VideoModel
+    .findOneWithPopulate({_id: videoId}, function (err, video) {
+      if (err) {
+        console.error(err);
+      }
 
-    if (video) {
-      marshal.sendVideoJson(res, video);
-    } else {
-      res.sendStatus(404);
-    }
-  });
+      if (video) {
+        marshal.sendVideoJson(res, video);
+      } else {
+        res.sendStatus(404);
+      }
+    });
 });
 
 
-router.post("/uploadFile.json", uploadService.upload, function(req, res) {
+router.post("/uploadFile.json", uploadService.upload, function (req, res) {
   marshal.sendFileJson(res, req.uploadedFile);
 });
 
