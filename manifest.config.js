@@ -20,24 +20,17 @@ assets.lib = assets.root + "lib/";
 assets.bower = assets.lib + "bower_components/";
 
 module.exports = {
+
   bundle: {
     application: {
+      options: {
+        uglify: true,
+        minCss: true,
+        rev: true,
+        sourcemaps: false
+      },
       scripts: [
-        assets.root + 'javascripts/*.js',
-        assets.root + 'javascripts/**/**.js'
-      ],
-
-      styles: assets.css + "style.css"
-    },
-    vendor: {
-      styles: [
-        assets.lib + "bootstrap.min.css",
-        assets.lib + "jquery-ui-1.11.4.custom/jquery-ui.theme.min.css",
-        assets.bower + "alertifyjs/dist/css/alertify-bootstrap-3.css",
-        assets.bower + "ionicons/css/ionicons.min.css"
-      ],
-      scripts: [
-
+        // Vendor
         assets.bower + "jquery/dist/jquery.min.js",
         assets.root + "lib/jquery-ui-1.11.4.custom/jquery-ui.min.js",
 
@@ -55,8 +48,22 @@ module.exports = {
         assets.bower + "ng-file-upload/ng-file-upload-all.min.js",
         assets.bower + "venturocket-angular-slider/build/angular-slider.min.js",
 
-        assets.root + "lib/ui-bootstrap-custom-build/ui-bootstrap-custom-0.13.1.min.js"
+        assets.root + "lib/ui-bootstrap-custom-build/ui-bootstrap-custom-0.13.1.min.js",
 
+        // Application
+        assets.root + 'javascripts/*.js',
+        assets.root + 'javascripts/**/**.js'
+      ],
+
+      styles: [
+        // Vendor
+        assets.lib + "bootstrap.min.css",
+        assets.lib + "jquery-ui-1.11.4.custom/jquery-ui.theme.min.css",
+        assets.bower + "alertifyjs/dist/css/alertify-bootstrap-3.css",
+        assets.bower + "ionicons/css/ionicons.min.css",
+
+        // Application
+        assets.css + "style.css"
       ]
     }
   },
