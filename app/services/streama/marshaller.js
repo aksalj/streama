@@ -152,7 +152,7 @@ exports.sendVideoJson = function (req, res, videos) {
       var src = file.getSrc();
       file = file.toJSON();
       file.src = src;
-      if (file.extension === ".srt") {
+      if (file.extension === ".srt" || file.extension === ".vtt") {
         subtitleFiles.push(file);
       } else {
         mediaFiles.push(file);
