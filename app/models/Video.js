@@ -87,4 +87,9 @@ VideoSchema.statics.findOneWithPopulate = function (query, callback) {
   });
 };
 
+VideoSchema.methods.getViewingStatusForUser = function (user, callback) {
+  var ViewingStatusModel = mongoose.model("ViewingStatus");
+  ViewingStatusModel.findOne({user: user, video: this._id}, callback);
+};
+
 module.exports = mongoose.model("Video", VideoSchema);

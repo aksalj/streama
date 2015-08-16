@@ -140,7 +140,7 @@ exports.sendFileJson = function (res, file) {
 
 };
 
-exports.sendVideoJson = function (res, videos) {
+exports.sendVideoJson = function (req, res, videos) {
 
   var prepData = function (video, callback) {
 
@@ -172,8 +172,19 @@ exports.sendVideoJson = function (res, videos) {
       apiId: video.apiId,
 
       files: mediaFiles,
-      subtitles: subtitleFiles
+      subtitles: subtitleFiles,
+
+      viewedStatus: null
     };
+
+    tasks.push(function (callback){ // Viewing Status
+      video.getViewingStatusForUser(req.user._id, function(err, status) {
+        if(status) {
+          data.viewedStatus = status;
+        }
+        callback(err);
+      });
+    });
 
     if (video._type === "Movie") {
 

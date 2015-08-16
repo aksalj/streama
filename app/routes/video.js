@@ -33,7 +33,7 @@ router.get('/', function (req, res) {
       console.error(err);
       videos = [];
     }
-    marshal.sendVideoJson(res, videos);
+    marshal.sendVideoJson(req, res, videos);
   });
   res.sendStatus(500);
 });
@@ -174,7 +174,7 @@ router.get('/show.json', function (req, res) {
       }
 
       if (video) {
-        marshal.sendVideoJson(res, video);
+        marshal.sendVideoJson(req, res, video);
       } else {
         res.sendStatus(404);
       }
