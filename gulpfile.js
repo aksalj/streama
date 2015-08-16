@@ -19,7 +19,7 @@ var CONFIG = "./manifest.config.js";
 var URL_PREFIX = "/public/";
 var DESTINATION = "./static/public";
 
-gulp.task('bundle', ["clean"], function () {
+gulp.task('manifest', ["clean"], function () {
   return gulp.src(CONFIG)
     .pipe(bundle())
 

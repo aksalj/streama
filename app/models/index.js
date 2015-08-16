@@ -20,6 +20,7 @@ exports.Video = require("./Video");
 exports.Movie = require("./Movie");
 exports.Episode = require("./Episode");
 exports.TvShow = require("./TvShow");
+exports.ViewingStatus = require("./ViewingStatus");
 exports.User = require("./User");
 
 

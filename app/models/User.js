@@ -20,21 +20,6 @@ var GenreSchema = mongoose.Schema({
 });
 var Genre = mongoose.model("Genre", GenreSchema);
 
-var Schema = mongoose.Schema;
-
-var ViewingStatusSchema = mongoose.Schema({
-  dateCreated: {type: Date, required: false},
-  lastUpdated: {type: Date, required: false},
-
-  video: {type: Schema.ObjectId, ref: 'VideoSchema', required: true},
-  tvShow: {type: Schema.ObjectId, ref: 'TvShowSchema'},
-
-  currentPlayTime: {type: Number, required: true},
-  runtime: Number,
-  completed: Boolean
-
-});
-var ViewingStatus = mongoose.model("ViewingStatus", ViewingStatusSchema);
 
 var UserSchema = mongoose.Schema({
   dateCreated: {type: Date, required: false},
@@ -54,7 +39,6 @@ var UserSchema = mongoose.Schema({
   fullName: String,
 
   favoriteGenres:[GenreSchema],
-  viewingStatus:[ViewingStatusSchema],
 
   roles:[String]
 

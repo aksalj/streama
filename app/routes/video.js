@@ -18,6 +18,7 @@ var async = require("async");
 var TvShowModel = require("../models").TvShow;
 var EpisodeModel = require("../models").Episode;
 var VideoModel = require("../models").Video;
+var ViewingStatusModel = require("../models").ViewingStatus;
 
 var marshal = require("../services/streama/marshaller");
 var settingsService = require("../services/streama/settings");
@@ -45,6 +46,7 @@ router.get('/dash.json', function (req, res) {
     function (callback) {
       TvShowModel.findAllNotDeleted(callback);
     },
+
     function (callback) {
       VideoModel.find({}, function (err, videos) {
         var result = [];
@@ -55,25 +57,57 @@ router.get('/dash.json', function (req, res) {
         });
         callback(null, result);
       });
+    },
+
+    function(callback) {
+      ViewingStatusModel
+        .find({user: user._id})
+        .populate("video")
+        .exec(function(err, statuses) {
+          if(err) {
+            console.error(err);
+            statuses = [];
+          }
+
+          var tasks = [];
+          statuses.forEach(function (item) {
+
+            var status = item.toJSON();
+            status.video.id = status.video._id;
+
+            if (status.video._type == "Episode") {
+              tasks.push(function (callback) {
+                EpisodeModel.findOne({_id: status.video._id})
+                  .populate("show", "name")
+                  .exec(function (err, video) {
+                    status.video = video.toJSON();
+                    status.video.id = video._id;
+                    callback(err, status);
+                  });
+              });
+            } else {
+              tasks.push(function (callback) {
+                callback(null, status);
+              });
+            }
+
+          });
+
+          async.series(tasks, callback);
+
+        });
     }
+
   ], function (err, results) {
 
     var tvShows = results[0];
     var videos = results[1];
-    var continueWatching = user.viewingStatus;
+    var continueWatching = results[2];
 
     var movies = [];
     videos.forEach(function (video) {
       if (video._type == "Movie" && video.files && video.files.length > 0) {
-        if (continueWatching.length > 0) {
-          for (var i = 0; i < continueWatching.length; i++) {
-            if (video._id != continueWatching[i].video._id) {
-              movies.push(video);
-            }
-          }
-        } else {
-          movies.push(video);
-        }
+        movies.push(video);
       }
     });
 
