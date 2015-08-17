@@ -43,6 +43,7 @@
     "express": "4.13.3",
     "file-stream-rotator": "0.0.6",
     "fs-extra": "^0.23.1",
+    "lodash": "^3.10.1",
     "mongoose": "4.1.1",
     "mongoose-schema-extend": "^0.1.7",
     "morgan": "^1.6.1",

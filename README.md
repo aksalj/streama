@@ -1,10 +1,11 @@
 # streama
 
 Ever had a huge bookshelf full of shows and movies? Ever wanted to digitalize them, but didn't have a good way of organizing the files? Worry no more! Streama is your own personal Netflix for just such a purpose!
+
 [Visit the Promo-Website here!](http://dularion.github.io/streama/)
 
 ###### Important
-This fork uses `express` & `mongodb` instead of `grail` & `mysql` because I don't like `Groovy`? The original work is at [https://github.com/dularion/streama](https://github.com/dularion/streama)
+This fork uses `express` & `mongodb` instead of `grail` & `mysql`. The original work is at [https://github.com/dularion/streama](https://github.com/dularion/streama)
 
 
 ## Table of contents:
@@ -29,6 +30,8 @@ $ npm install
 $ bower install
 $ npm start
 ```
+
+Check `/config/default.json` for server configurations.
 
 # The Application
 

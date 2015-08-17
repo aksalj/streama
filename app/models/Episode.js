@@ -13,11 +13,10 @@
 'use strict';
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
+var _ = require("lodash");
+
 var VideoSchema = require("./Video").schema;
 
-String.prototype.padLeft = function(l,c) {
-  return new Array(l-this.length+1).join(c||" ")+this;
-};
 
 var EpisodeSchema = VideoSchema.extend({
   name: String,
@@ -33,8 +32,8 @@ var EpisodeSchema = VideoSchema.extend({
 });
 
 EpisodeSchema.pre('save', function(next) {
-  this.episodeString = "S" + this.season_number.toString().padLeft(2, '0');
-  this.episodeString += "E" + this.episode_number.toString().padLeft(2, '0');
+  this.episodeString = "S" + _.padLeft(this.season_number.toString(), 2, '0');
+  this.episodeString += "E" + _.padLeft(this.episode_number.toString(), 2, '0');
   next();
 });
 
