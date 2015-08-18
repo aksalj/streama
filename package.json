@@ -56,9 +56,9 @@
     "uuid": "^2.0.1"
   },
   "devDependencies": {
+    "del": "^1.2.1",
     "gulp": "^3.9.0",
     "gulp-bundle-assets": "^2.22.0",
-    "gulp-rimraf": "^0.1.1",
     "request-debug": "*"
   }
 }

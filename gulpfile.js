@@ -12,7 +12,7 @@
  */
 'use strict';
 var gulp = require('gulp'),
-  rimraf = require('gulp-rimraf'),
+  del = require('del'),
   bundle = require('gulp-bundle-assets');
 
 var CONFIG = "./manifest.config.js";
@@ -32,7 +32,6 @@ gulp.task('manifest', ["clean"], function () {
     .pipe(gulp.dest(DESTINATION));
 });
 
-gulp.task('clean', function() {
-  return gulp.src(DESTINATION, { read: false })
-    .pipe(rimraf());
+gulp.task('clean', function(cb) {
+  del(DESTINATION, cb);
 });
