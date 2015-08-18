@@ -42,11 +42,12 @@ app.use(passport.session());
 // Static & Views
 app.set('view engine', 'ejs');
 app.set('views', 'static/views');
-app.use(express.static('static'));
-// FIXME: Find cleaner way of doing this
-app.use(express.static('static/assets/javascripts/streama-app/templates'));
-app.use("/assets/fonts", express.static('static/assets/lib/bower_components/bootstrap/fonts'));
-app.use("/template", express.static('static/assets/lib/bower_components/angular-ui-bootstrap/template'));
+app.use(express.static('static/public/templates'));
+app.use("/template", express.static('static/public/templates'));
+app.use("/public", express.static('static/public'));
+app.use("/images", express.static('static/public/images'));
+app.use("/fonts", express.static('static/public/fonts'));
+
 
 // Routes
 //    API

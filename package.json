@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node app/index.js",
+    "prestart": "gulp build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -43,6 +44,7 @@
     "express": "4.13.3",
     "file-stream-rotator": "0.0.6",
     "fs-extra": "^0.23.1",
+    "html-minifier": "^0.7.2",
     "lodash": "^3.10.1",
     "mongoose": "4.1.1",
     "mongoose-schema-extend": "^0.1.7",
@@ -59,6 +61,7 @@
     "del": "^1.2.1",
     "gulp": "^3.9.0",
     "gulp-bundle-assets": "^2.22.0",
+    "gulp-flatten": "^0.1.1",
     "request-debug": "*"
   }
 }

@@ -11,7 +11,6 @@
  *
  */
 'use strict';
-
 var assets = { root : "./static/assets/" };
 assets.img = assets.root + "images/";
 assets.css = assets.root + "stylesheets/";
@@ -19,16 +18,20 @@ assets.js = assets.root + "javascripts/";
 assets.lib = assets.root + "lib/";
 assets.bower = assets.lib + "bower_components/";
 
+var prodLikeEnvs = ["production"];
+
 module.exports = {
 
   bundle: {
     application: {
       options: {
-        uglify: true,
-        minCss: true,
-        rev: true,
-        sourcemaps: false
+        uglify:prodLikeEnvs,
+        minCss: prodLikeEnvs,
+        rev: prodLikeEnvs,
+        sourcemaps: false,
+        result: { type: 'plain' }
       },
+
       scripts: [
         // Vendor
         assets.bower + "jquery/dist/jquery.min.js",
@@ -66,32 +69,5 @@ module.exports = {
         assets.css + "style.css"
       ]
     }
-  },
-
-  copy: [
-
-    {
-      src:[
-        assets.img + "*.{gif,ico,png}",
-        assets.img + "**/*.{gif,ico,png}"
-      ],
-      base: assets.img + "/../" // copy /public/images/* to be accessed as /images/*
-    },
-
-    {
-      src: assets.js + 'streama-app/templates/*.tpl.htm',
-      base: assets.js + 'streama-app/templates/' // copy /public/* to be accessed as /*.tpl.htm
-    },
-
-    {
-      src: assets.bower + 'angular-ui-bootstrap/template/**/*.html',
-      // TODO: copy /public/* to be accessed as /*.html
-    },
-
-    {
-      src: assets.root + '**/*.{eot,ttf,woff}',
-      // TODO: copy /public/fonts/* to be accessed as /fonts/*
-    }
-
-  ]
+  }
 };

@@ -11,79 +11,26 @@
  *
  */
 'use strict';
+var minify = require('html-minifier').minify;
+
+var utils = require("./../../utils");
 var settingsService = require("./settings");
 
+var manifest = require("../../../manifest.json");
 
-var paths = { base: "/", root: settingsService.getBaseUrl() };
+var paths = { base: "/", root: "/" }; // settingsService.getBaseUrl() for root?
 paths.login = paths.root + "auth/login";
 paths.logout = paths.root + "auth/logout";
 
-var assets = { root : paths.root + "assets/" };
+var assets = { root : paths.root + "public/" };
 assets.img = assets.root + "images/";
-assets.css = assets.root + "stylesheets/";
-assets.js = assets.root + "javascripts/";
-assets.lib = assets.root + "lib/";
-assets.bower = assets.lib + "bower_components/";
 
-
-// Ideally these should be compiled into single files.
 var styles = [
-  assets.lib + "bootstrap.min.css",
-  assets.lib + "jquery-ui-1.11.4.custom/jquery-ui.theme.min.css",
-  assets.bower + "alertifyjs/dist/css/alertify-bootstrap-3.css",
-  assets.bower + "ionicons/css/ionicons.min.css",
-
-  assets.css + "style.css"
+  assets.root + manifest.application.styles
 ];
 
 var scripts = [
-  assets.bower + "jquery/dist/jquery.min.js",
-  assets.root + "lib/jquery-ui-1.11.4.custom/jquery-ui.min.js",
-
-  assets.bower + "alertifyjs/dist/js/alertify.js",
-  assets.bower + "bootstrap/dist/js/bootstrap.min.js",
-  assets.bower + "angular/angular.js",
-  assets.bower + "angular-bootstrap/ui-bootstrap-tpls.js",
-  assets.bower + "angular-local-storage/dist/angular-local-storage.min.js",
-  assets.bower + "angular-sanitize/angular-sanitize.min.js",
-  assets.bower + "angular-ui-router/release/angular-ui-router.min.js",
-  assets.bower + "angular-ui-slider/src/slider.js",
-  assets.bower + "Autolinker.js/dist/Autolinker.min.js",
-  assets.bower + "lodash/lodash.min.js",
-  assets.bower + "mousetrap/mousetrap.min.js",
-  assets.bower + "ng-file-upload/ng-file-upload-all.min.js",
-  assets.bower + "venturocket-angular-slider/build/angular-slider.min.js",
-
-  assets.root + "lib/ui-bootstrap-custom-build/ui-bootstrap-custom-0.13.1.min.js",
-
-  assets.js + "streama-app.js",
-
-  assets.js + "controllers/admin-ctrl.js",
-  assets.js + "controllers/admin-movie-ctrl.js",
-  assets.js + "controllers/admin-movies-ctrl.js",
-  assets.js + "controllers/admin-settings-ctrl.js",
-  assets.js + "controllers/admin-show-ctrl.js",
-  assets.js + "controllers/admin-shows-ctrl.js",
-  assets.js + "controllers/admin-users-ctrl.js",
-  assets.js + "controllers/dash-ctrl.js",
-  assets.js + "controllers/player-ctrl.js",
-  assets.js + "controllers/profile-ctrl.js",
-  assets.js + "controllers/modal-file-browser-ctrl.js",
-  assets.js + "controllers/modal-file-ctrl.js",
-  assets.js + "controllers/modal-movie-ctrl.js",
-  assets.js + "controllers/modal-tvshow-ctrl.js",
-  assets.js + "controllers/modal-user-ctrl.js",
-  assets.js + "controllers/modal-video-ctrl.js",
-
-  assets.js + "directives/admin-episode-directive.js",
-  assets.js + "directives/streama-video-player-directive.js",
-
-  assets.js + "services/api-service.js",
-  assets.js + "services/filters.js",
-  assets.js + "services/player-service.js",
-  assets.js + "services/modal-service.js",
-  assets.js + "services/socket-service.js",
-  assets.js + "services/upload-service.js"
+  assets.root + manifest.application.scripts
 ];
 
 
@@ -101,7 +48,22 @@ exports.render = function (req, res, data) {
   data.styles = styles;
   data.scripts = scripts;
 
-  res.render(data.layout, data);
+  if(utils.isProduction()) { // Minify HTML in production
+    res.render(data.layout, data, function (err, html) {
+      if (err) throw err;
+      html = minify(html, {
+        removeComments: true,
+        removeCommentsFromCDATA: true,
+        collapseWhitespace: true,
+        collapseBooleanAttributes: true,
+        removeAttributeQuotes: true,
+        removeEmptyAttributes: true
+      });
+      res.send(html);
+    });
+  } else {
+    res.render(data.layout, data);
+  }
 };
 
 exports.renderEmail = function(user, callback) {

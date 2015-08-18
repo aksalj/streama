@@ -23,7 +23,7 @@ This fork uses `express` & `mongodb` instead of `grail` & `mysql`. The original 
 - [License](#license)
 
 # Getting Started
-Assuming you have `mongodb`, `nodejs`, `npm` and `bower` correctly installed, fire up your `mongodb`, and:
+Assuming you have `mongodb`, `nodejs`, `npm`, `gulp` and `bower` correctly installed, fire up your `mongodb`, and:
 
 ```shell
 $ npm install
