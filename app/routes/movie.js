@@ -36,7 +36,7 @@ router.get("/show.json", function(req, res) {
       console.error(err);
       res.sendStatus(404);
     } else {
-      marshal.sendVideoJson(res, movie);
+      marshal.sendVideoJson(req, res, movie);
     }
   })
 });
@@ -46,7 +46,9 @@ router.post("/save.json", function(req, res) {
 
   // Find or create
   var id = data._id || null;
-  MovieModel.findOne({_id: id}, function (err, found) {
+  var apiId = data.apiId;
+  MovieModel.findOne({$or:[{_id: id}, {apiId: apiId}]}, function (err, found) {
+    // FIXME: Ideally, frontend would make sure there are no duplicates. For now, just update if already exists.
     if (err) {
       console.error(err);
     }

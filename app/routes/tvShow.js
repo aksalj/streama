@@ -58,7 +58,9 @@ router.post('/save.json', function (req, res) {
 
   // Find or create
   var id = showData._id || null;
-  TvShowModel.findOne({_id: id}, function (err, found) {
+  var apiId = showData.apiId;
+  TvShowModel.findOne({$or:[{_id: id}, {apiId: apiId}]}, function (err, found) {
+    // FIXME: Ideally, frontend would make sure there are no duplicates. For now, just update if already exists.
     if (err) {
       console.error(err);
     }
