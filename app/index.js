@@ -54,6 +54,7 @@ app.use("/fonts", express.static('static/public/fonts'));
 app.use("/user(.json)?", authService.ensureAuthenticated, routes.UserRoutes);
 app.use("/settings(.json)?", authService.ensureAuthenticated, routes.SettingsRoutes);
 app.use("/theMovieDb", authService.ensureAuthenticated, routes.TMDbRoutes);
+app.use("/dash", authService.ensureAuthenticated, routes.DashRoutes);
 app.use("/video(.json)?", authService.ensureAuthenticated, routes.VideoRoutes);
 app.use("/file(.json)?", authService.ensureAuthenticated, routes.FileRoutes);
 app.use("/episode(.json)?", authService.ensureAuthenticated, routes.EpisodeRoutes);

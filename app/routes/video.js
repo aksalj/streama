@@ -23,6 +23,7 @@ var ViewingStatusModel = require("../models").ViewingStatus;
 var marshal = require("../services/streama/marshaller");
 var settingsService = require("../services/streama/settings");
 var uploadService = require("../services/streama/upload");
+var mediaService = require("../services/streama/media");
 
 var router = express.Router();
 
@@ -123,31 +124,9 @@ router.get('/dash.json', function (req, res) {
       }
 
       // Find first episode in tvShow??
-      var firstEpisode = null;
-      for (i = 0; i < tvShow.episodes.length; i++) {
-        var ep = tvShow.episodes[i];
-        if (ep.files && ep.season_number != "0") {
-          firstEpisode = ep;
-          break;
-        }
-      }
-      if (firstEpisode) {
-        tvShow.episodes.forEach(function (ep) {
-          if (ep.season_number == firstEpisode.season_number &&
-            ep.episode_number < firstEpisode.episode_number && ep.files.length != 0) {
-            firstEpisode = ep;
-          } else if (ep.season_number < firstEpisode.season_number && ep.files.length != 0 &&
-            ep.season_number != "0") {
-            firstEpisode = ep;
-          }
-        });
-      }
+      var firstEpisode = mediaService.getFirstEpisode(tvShow);
 
-      if (firstEpisode && firstEpisode.files.length != 0) {
-        firstEpisode = firstEpisode.toJSON();
-        firstEpisode.id = firstEpisode._id;
-        firstEpisode.show = tvShow.toJSON();
-        firstEpisode.show.id = tvShow._id;
+      if (firstEpisode) {
         firstEpisodes.push(firstEpisode);
       }
 

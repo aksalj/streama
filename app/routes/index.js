@@ -26,3 +26,4 @@ exports.EpisodeRoutes = require("./episode");
 exports.MovieRoutes = require("./movie");
 exports.WebSocketRoutes = require("./websocket");
 exports.ViewingStatusRoutes = require("./viewingStatus");
+exports.DashRoutes = require("./dash");

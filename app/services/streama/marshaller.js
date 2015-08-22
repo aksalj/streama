@@ -14,6 +14,7 @@
 var conf = require("config");
 var async = require("async");
 var settingsService = require("./settings");
+var mediaService = require("./media");
 
 var defaultRoles = conf.get("defaultData.roles");
 
@@ -50,6 +51,8 @@ var _makePublicUser = function (user) {
 
   return data;
 };
+
+var _prepVideoJson = null;
 
 var sendJson = function (res, data, status) {
   if (!status) {
@@ -142,94 +145,11 @@ exports.sendFileJson = function (res, file) {
 
 exports.sendVideoJson = function (req, res, videos) {
 
-  var prepData = function (video, callback) {
-
-    var tasks = [];
-
-    var mediaFiles = [];
-    var subtitleFiles = [];
-    video.files.forEach(function (file) {
-      var src = file.getSrc();
-      file = file.toJSON();
-      file.src = src;
-      if (file.extension === ".srt" || file.extension === ".vtt") {
-        subtitleFiles.push(file);
-      } else {
-        mediaFiles.push(file);
-      }
-    });
-
-    var data = {
-      id: video.id,
-      dateCreated: video.dateCreated,
-      lastUpdated: video.lastUpdated,
-      overview: video.overview,
-      imdb_id: video.imdb_id,
-      vote_average: video.vote_average,
-      vote_count: video.vote_count,
-      popularity: video.popularity,
-      original_language: video.original_language,
-      apiId: video.apiId,
-
-      files: mediaFiles,
-      subtitles: subtitleFiles,
-
-      viewedStatus: null
-    };
-
-    tasks.push(function (callback){ // Viewing Status
-      video.getViewingStatusForUser(req.user._id, function(err, status) {
-        if(status) {
-          data.viewedStatus = status;
-        }
-        callback(err);
-      });
-    });
-
-    if (video._type === "Movie") {
-
-      data.title = video.title;
-      data.release_date = video.release_date;
-      data.backdrop_path = video.backdrop_path;
-      data.poster_path = video.poster_path;
-
-      tasks.push(function(cb) {
-        video.getSimilarMovies(function (err, similar) {
-          data.similarMovies = similar;
-          cb(null);
-        });
-      });
-
-    } else if (video._type === "Episode") {
-
-      try{
-        data.show = video.show.toJSON();
-        data.show.id = data.show._id;
-      } catch(e){
-        // FIXME: show.id is needed by the frontend.
-        data.show = video.show;
-      }
-      data.episodeString = video.episodeString;
-      data.name = video.name;
-      data.air_date = video.air_date;
-      data.season_number = video.season_number;
-      data.episode_number = video.episode_number;
-      data.still_path = video.still_path;
-
-      // TODO: Next Episode
-    }
-
-    async.series(tasks, function(err, result) {
-      callback(data);
-    });
-
-  };
-
   if( videos instanceof Array) {
     var tasks = [];
     videos.forEach(function (video) {
       tasks.push(function(callback) {
-        prepData(video, function (data) {
+        _prepVideoJson(req, video, function (data) {
           callback(null, data);
         });
       });
@@ -240,10 +160,98 @@ exports.sendVideoJson = function (req, res, videos) {
     });
 
   } else {
-    prepData(videos, function(data) {
+    _prepVideoJson(req, videos, function(data) {
       sendJson(res, data);
     });
   }
+
+};
+
+exports.makeVideoJson = _prepVideoJson = function (req, video, callback, minimal) {
+
+  var tasks = [];
+
+  var mediaFiles = [];
+  var subtitleFiles = [];
+  video.files.forEach(function (file) {
+    var src = file.getSrc();
+    file = file.toJSON();
+    file.src = src;
+    if (file.extension === ".srt" || file.extension === ".vtt") {
+      subtitleFiles.push(file);
+    } else {
+      mediaFiles.push(file);
+    }
+  });
+
+  var data = {
+    id: video.id,
+    dateCreated: video.dateCreated,
+    lastUpdated: video.lastUpdated,
+    overview: video.overview,
+    imdb_id: video.imdb_id,
+    vote_average: video.vote_average,
+    vote_count: video.vote_count,
+    popularity: video.popularity,
+    original_language: video.original_language,
+    apiId: video.apiId,
+
+    files: mediaFiles,
+    subtitles: subtitleFiles,
+    hasFiles: mediaFiles.length > 0,
+
+    viewedStatus: null
+  };
+
+  if(!minimal) {
+    tasks.push(function (callback) { // Viewing Status
+      video.getViewingStatusForUser(req.user._id, function (err, status) {
+        if (status) {
+          data.viewedStatus = status;
+        }
+        callback(err);
+      });
+    });
+  }
+
+  if (video._type === "Movie") {
+
+    data.title = video.title;
+    data.release_date = video.release_date;
+    data.backdrop_path = video.backdrop_path;
+    data.poster_path = video.poster_path;
+
+    if(!minimal) {
+      tasks.push(function (cb) {
+        video.getSimilarMovies(function (err, similar) {
+          data.similarMovies = similar;
+          cb(null);
+        });
+      });
+    }
+
+  } else if (video._type === "Episode") {
+
+    try{
+      data.show = video.show.toJSON();
+      data.show.id = data.show._id;
+    } catch(e){
+      // FIXME: show.id is needed by the frontend.
+      data.show = video.show;
+    }
+    data.episodeString = video.episodeString;
+    data.name = video.name;
+    data.air_date = video.air_date;
+    data.season_number = video.season_number;
+    data.episode_number = video.episode_number;
+    data.still_path = video.still_path;
+
+    // TODO: Next Episode
+  }
+
+  async.series(tasks, function(err, result) {
+    callback(data);
+  });
 
 };
 
@@ -273,7 +281,10 @@ exports.makeFullShowJson = function (tvShow) {
       imdb_id: show.imdb_id,
       popularity: show.popularity,
       episodesWithFilesCount: episodesWithFiles,
-      episodesCount: show.episodes.length
+      episodesCount: show.episodes.length,
+
+      hasFiles: episodesWithFiles > 0,
+      firstEpisode: mediaService.getFirstEpisode(show)
     };
   };
 

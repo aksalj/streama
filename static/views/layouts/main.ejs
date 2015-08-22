@@ -38,6 +38,16 @@
     <% if (auth.user) { %>
     <ul class="nav navbar-nav">
 
+
+      <li ng-if="isCurrentState('dash')">
+        <div class="dash-search form-group has-feedback">
+          <input type="text" placeholder="Search.." class="form-control input-xs" ng-model="dashSearch"
+                 typeahead-append-to-body="true" typeahead="(item.title || item.name) for item in searchMedia($viewValue)"
+                 typeahead-on-select="selectFromSearch($item)" typeahead-template-url="typeahead--media.tpl.htm"/>
+          <span class="form-control-feedback ion-android-search" aria-hidden="true"></span>
+        </div>
+      </li>
+
       <li><a ui-sref="dash">Dashboard</a></li>
 
       <%# if user is content manager  %>
