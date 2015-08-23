@@ -9,8 +9,9 @@
 manifest.json
 static/public/
 
-# Nodejs & Bower
+# Nodejs & Bower & Other trash
 *.log
+*.css.map
 node_modules/
 bower_components/
 
