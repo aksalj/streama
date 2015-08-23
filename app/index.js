@@ -18,6 +18,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session');
 var flash = require('connect-flash');
+var compression = require('compression');
 
 var utils = require("./utils");
 var routes = require("./routes");
@@ -29,6 +30,9 @@ var app = module.exports = express(); // Allow for circular dependency
 
 // Logs
 utils.logger.setup(app, conf.util.getEnv('NODE_ENV'));
+
+// Compression
+app.use(compression());
 
 // Parsers
 app.use(cookieParser());

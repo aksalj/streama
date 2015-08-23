@@ -80,10 +80,13 @@ router.get('/dash.json', function (req, res) {
             if (status.video._type == "Episode") {
               tasks.push(function (callback) {
                 EpisodeModel.findOne({_id: status.video._id})
-                  .populate("show", "name")
+                  .populate({path:"show", select:"name backdrop_path"})
                   .exec(function (err, video) {
                     status.video = video.toJSON();
                     status.video.id = video._id;
+                    status.video.isEpisode = true;
+                    status.video.title = video.show.name;
+                    status.video.backdrop_path = video.still_path || video.show.backdrop_path;
                     callback(err, status);
                   });
               });
