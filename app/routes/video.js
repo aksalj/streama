@@ -147,6 +147,7 @@ router.get('/dash.json', function (req, res) {
         firstEpisode = firstEpisode.toJSON();
         firstEpisode.id = firstEpisode._id;
         firstEpisode.show = tvShow.toJSON();
+        firstEpisode.show.id = tvShow._id;
         firstEpisodes.push(firstEpisode);
       }
 

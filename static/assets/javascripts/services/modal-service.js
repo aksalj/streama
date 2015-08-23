@@ -115,7 +115,7 @@ streamaApp.factory('modalService', ['$modal', function ($modal) {
 
 		mediaDetailModal: function (media, callback) {
 			var modalInstance = $modal.open({
-				templateUrl: 'modal--media-detail.htm',
+				templateUrl: 'modal--media-detail.tpl.htm',
 				controller: 'modalMediaDetailCtrl',
 				size: 'lg',
 				resolve: {
