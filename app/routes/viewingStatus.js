@@ -28,13 +28,13 @@ router.get('/', function(req, res) {
         console.error(err);
         statuses = [];
       }
-      callback(err, statuses);
+      marshal.sendJson(res, statuses);
     });
 });
 
 router.get('/save.json', function(req, res) {
-  var currentTime = req.query.currentTime;
-  var runtime = req.query.runtime;
+  var currentTime = parseFloat(req.query.currentTime);
+  var runtime = parseFloat(req.query.runtime);
   var videoId = req.query.videoId;
 
   VideoModel.findOne({_id: videoId}, function (err, video) {
@@ -44,8 +44,9 @@ router.get('/save.json', function(req, res) {
     } else {
 
       var data = {
+        completed: currentTime == runtime,
         runtime: runtime,
-        currentPlayTime: currentTime,
+        currentPlayTime: currentTime == runtime ? 0 : currentTime,
         user: req.user._id,
         video: video._id,
         tvShow: video._type == "Episode" ? video.show : null
@@ -105,6 +106,14 @@ router.delete("/delete.json", function(req, res) {
   ViewingStatusModel.findOneAndRemove({_id: id}, function(err){
     res.sendStatus(500);
   });
+});
+
+router.get("/markCompleted.json", function(req, res) {
+  var statusId = req.query.id;
+  ViewingStatusModel.findOneAndUpdate({_id: statusId}, {completed: true, currentPlayTime: 0}, function(err, status){
+    marshal.sendJson(res, status);
+  });
+
 });
 
 module.exports = router;

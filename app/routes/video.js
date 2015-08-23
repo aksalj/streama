@@ -62,7 +62,7 @@ router.get('/dash.json', function (req, res) {
 
     function(callback) {
       ViewingStatusModel
-        .find({user: user._id})
+        .find({user: user._id, completed: false})
         .populate("video")
         .exec(function(err, statuses) {
           if(err) {
@@ -74,6 +74,7 @@ router.get('/dash.json', function (req, res) {
           statuses.forEach(function (item) {
 
             var status = item.toJSON();
+            status.id = item._id;
             status.video.id = status.video._id;
 
             if (status.video._type == "Episode") {
