@@ -66,7 +66,7 @@ app.use("/movie(.json)?", authService.ensureAuthenticated, routes.MovieRoutes);
 app.use("/tvShow(.json)?", authService.ensureAuthenticated, routes.TvShowRoutes);
 app.use("/viewingStatus", authService.ensureAuthenticated, routes.ViewingStatusRoutes);
 app.use("/websocket", authService.ensureAuthenticated, routes.WebSocketRoutes);
-
+app.use("/notificationQueue", authService.ensureAdminAuthenticated, routes.NotiticationQueueRoutes);
 
 //    UI
 app.use("/auth", routes.AuthRoutes);

@@ -21,6 +21,7 @@ exports.Movie = require("./Movie");
 exports.Episode = require("./Episode");
 exports.TvShow = require("./TvShow");
 exports.ViewingStatus = require("./ViewingStatus");
+exports.NotificationQueue = require("./NotificationQueue");
 exports.User = require("./User");
 
 

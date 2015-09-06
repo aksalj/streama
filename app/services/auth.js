@@ -19,3 +19,13 @@ exports.ensureAuthenticated = function (req, res, next) {
     res.redirect('/auth/login');
   }
 };
+
+exports.ensureAdminAuthenticated = function (req, res, next) {
+  if (req.isAuthenticated()) {
+    // FIXME: Check user role!!
+    return next();
+  } else {
+    // HUH: Redirect or just send error?
+    res.redirect('/auth/login');
+  }
+};
