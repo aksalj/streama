@@ -15,13 +15,15 @@ var mongoose = require("mongoose");
 
 
 var NotificationQueueSchema = mongoose.Schema({
-  dateCreated: {type: Date, required: false},
+  dateCreated: {type: Date, required: false, default: Date.now},
   lastUpdated: {type: Date, required: false},
 
-  completed: {type:Boolean, default: false},
+  isCompleted: {type:Boolean, default: false},
 
   tvShow:{type: mongoose.Schema.ObjectId, ref: "TvShow"},
-  movie:{type: mongoose.Schema.ObjectId, ref: "Movie"}
+  movie:{type: mongoose.Schema.ObjectId, ref: "Movie"},
+
+  description: String
 
 });
 

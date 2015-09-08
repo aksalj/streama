@@ -94,7 +94,7 @@ router.post('/saveAndInviteUser.json', function (req, res) {
       if (!user.invitationSent && user.enabled) {
         user.uuid = uuid.v4();
 
-        uiService.renderEmail(user, function (err, html) {
+        uiService.renderInviteEmail(user, function (err, html) {
           if (!err) {
 
             var message = {

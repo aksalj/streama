@@ -202,47 +202,47 @@
               <h1>New Content on Streama</h1>
               <p style="font-size: 16px;">Recently, the following content was added to Streama</p>
 
-              <!--<g:if test="${notificationQueues.findAll{it.movie}}">-->
-                <!--<h3>New Movies</h3>-->
+              <% if (movies.length > 0) { %>
+                <h3>New Movies</h3>
 
-                <!--<table>-->
-                  <!--<g:each in="${notificationQueues.findAll{it.movie}}" var="notification">-->
-                    <!--<tr>-->
-                      <!--<td width="100px">-->
-                        <!--<img src="https://image.tmdb.org/t/p/w92/${notification.movie.poster_path}"/>-->
-                      <!--</td>-->
-                      <!--<td>-->
-                        <!--<p><strong>${notification.movie.title} (${notification.movie.release_date?.substring(0,4)})</strong></p>-->
-                        <!--<p>${notification.description}</p>-->
-                      <!--</td>-->
-                    <!--</tr>-->
-                  <!--</g:each>-->
-                <!--</table>-->
+                <table>
+                  <% for (var i = 0; i < movies.length; i++) { %>
+                    <% var movie = movies[i].movie %>
+                    <tr>
+                      <td width="100px">
+                        <img src="<%='https://image.tmdb.org/t/p/w92/' + movie.poster_path %>"/>
+                      </td>
+                      <td>
+                        <p><strong><%=movie.title + " " + movie.release_date.substring(0,4)%></strong></p>
+                      </td>
+                    </tr>
+                  <% } %>
+                </table>
 
-                <!--<hr/>-->
-              <!--</g:if>-->
+                <hr/>
+              <% } %>
 
-              <!--<g:if test="${notificationQueues.findAll{it.tvShow}}">-->
-                <!--<h3>New Tv Shows</h3>-->
-                <!--<table>-->
-                  <!--<g:each in="${notificationQueues.findAll{it.tvShow}}" var="notification">-->
-                    <!--<tr>-->
-                      <!--<td width="100px">-->
-                        <!--<img src="https://image.tmdb.org/t/p/w92/${notification.tvShow.poster_path}"/>-->
-                      <!--</td>-->
-                      <!--<td>-->
-                        <!--<p><strong>${notification.tvShow.name} (${notification.tvShow.first_air_date?.substring(0,4)})</strong></p>-->
-                        <!--<p>${notification.description}</p>-->
-                      <!--</td>-->
-                    <!--</tr>-->
-                  <!--</g:each>-->
-                <!--</table>-->
+              <% if (tvShows.length > 0) { %>
+                <h3>New Tv Shows</h3>
+                <table>
+                  <% for (var y = 0; y < tvShows.length; y++) { %>
+                    <% var tvShow = tvShows[y].tvShow %>
+                    <tr>
+                      <td width="100px">
+                        <img src="<%='https://image.tmdb.org/t/p/w92/' + tvShow.poster_path %>"/>
+                      </td>
+                      <td>
+                        <p><strong><%=tvShow.name + " " + tvShow.first_air_date.substring(0,4)%></strong></p>
+                        <p><%= tvShows[y].description %></p>
+                      </td>
+                    </tr>
+                  <% } %>
+                </table>
+                <hr style="border-color: #ccc;"/>
+              <% } %>
 
-                <!--<hr style="border-color: #ccc;"/>-->
-              <!--</g:if>-->
 
-
-              <!--<a href="${streama.Settings.findBySettingsKey('Base URL')?.value}/" class="btn-primary" style="font-size: 20px;">Visit Streama now!</a>-->
+              <a href="<%= baseUrl %>" class="btn-primary" style="font-size: 20px;">Visit Streama now!</a>
             </td>
           </tr>
         </table>

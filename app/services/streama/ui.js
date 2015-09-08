@@ -66,7 +66,7 @@ exports.render = function (req, res, data) {
   }
 };
 
-exports.renderEmail = function(user, callback) {
+exports.renderInviteEmail = function(user, callback) {
 
   var emailData = {
     title: "Invitation",
@@ -76,6 +76,30 @@ exports.renderEmail = function(user, callback) {
   //
   var app = require("../../index");
   app.render('mail/userInvite', emailData, callback);
+};
+
+exports.renderNotificationsEmail = function(notifications, callback) {
+
+  var movies = [];
+  var tvShows = [];
+  notifications.forEach(function(notif) {
+    if(notif.movie) {
+      movies.push(notif);
+    } else if (notif.tvShow) {
+      tvShows.push(notif);
+    }
+  });
+
+  var emailData = {
+    title: "Notification",
+    baseUrl: settingsService.getBaseUrl(),
+    movies: movies,
+    tvShows: tvShows
+  };
+
+  //
+  var app = require("../../index");
+  app.render('mail/notification', emailData, callback);
 };
 
 exports.showError = function (req, res, error) {
